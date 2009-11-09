@@ -55,7 +55,6 @@ def choose_cache(fun_name):
     client = queryUtility(IMemcachedClient)
     return MemcacheAdapter(client, globalkey=fun_name)
 
-
 directlyProvides(choose_cache, ICacheChooser)
 
 

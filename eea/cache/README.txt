@@ -17,7 +17,13 @@ cache decorator
   >>> @cache(key, dependencies=["frontpage"])
   ... def myMethod(num):
   ...     return num*num
-  
+
+Lets clear any running memcache
+
+  >>> from lovely.memcached.event import InvalidateCacheEvent
+  >>> from zope.event import notify
+  >>> notify(InvalidateCacheEvent(raw=True, dependencies=['frontpage']))
+
 Our myMethod will now be cached with the key returned from the method 'key' and
 with dependency 'frontpage'.
 
@@ -27,8 +33,6 @@ with dependency 'frontpage'.
   4
 
 
-  >>> from lovely.memcached.event import InvalidateCacheEvent
-  >>> from zope.event import notify
   >>> notify(InvalidateCacheEvent(raw=True, dependencies=['frontpage']))
   >>> myMethod(3)
   9

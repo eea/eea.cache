@@ -5,9 +5,9 @@
    <subscriber handler="lovely.memcached.event.invalidateCache"/>
 
    <utility provides="lovely.memcached.interfaces.IMemcachedClient"
-	     factory=".cache.frontpageMemcached" />
+	     factory=".frontpageMemcached" />
 
-   <utility component=".cache.choose_cache"
+   <utility component=".choose_cache"
              provides="plone.memoize.interfaces.ICacheChooser" />
  
 </configure>

@@ -19,10 +19,8 @@ __docformat__ = "reStructuredText"
 import unittest
 from zope.app  import component
 from zope.testing import doctest
-from zope.testing.doctestunit import DocTestSuite, DocFileSuite
+from zope.testing.doctestunit import DocFileSuite
 
-from zope.app.intid.interfaces import IIntIds
-from zope.app.intid import IntIds
 
 from zope.app.testing.placelesssetup import setUp, tearDown
 from zope.configuration.xmlconfig import XMLConfig
