@@ -17,22 +17,22 @@ $Id$
 __docformat__ = "reStructuredText"
 
 import unittest
-from zope import component
+from zope.app  import component
 from zope.testing import doctest
 from zope.testing.doctestunit import DocTestSuite, DocFileSuite
 
 from zope.app.intid.interfaces import IIntIds
 from zope.app.intid import IntIds
 
-from zope.app.testing import setup
+from zope.app.testing.placelesssetup import setUp, tearDown
+from zope.configuration.xmlconfig import XMLConfig
 
+import eea.cache
+def eeaSetUp(test):
+    setUp()
 
-def setUp(test):
-    test.globs['root'] = setup.placefulSetUp(site=True)
-    component.provideUtility(IntIds(), IIntIds)
-
-def tearDown(test):
-    setup.placefulTearDown()
+    XMLConfig('meta.zcml', component)()
+    XMLConfig('configure.zcml', eea.cache)()
 
 
 def test_suite():
@@ -40,6 +40,7 @@ def test_suite():
         DocFileSuite(
             '../README.txt',
             optionflags=doctest.NORMALIZE_WHITESPACE|doctest.ELLIPSIS,
+            setUp=eeaSetUp,tearDown=tearDown
         ),
         )
     return unittest.TestSuite(level1Suites)

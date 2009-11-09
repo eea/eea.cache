@@ -14,7 +14,7 @@ cache decorator
 
 
   >>> from eea.cache import cache
-  >>> @cache(key, dependencies=u"frontpage")
+  >>> @cache(key, dependencies=["frontpage"])
   ... def myMethod(num):
   ...     return num*num
   
@@ -29,7 +29,7 @@ with dependency 'frontpage'.
 
   >>> from lovely.memcached.event import InvalidateCacheEvent
   >>> from zope.event import notify
-  >>> notify(InvalidateCacheEvent(raw=True, dependencies=[u'frontpage']))
+  >>> notify(InvalidateCacheEvent(raw=True, dependencies=['frontpage']))
   >>> myMethod(3)
   9
 
