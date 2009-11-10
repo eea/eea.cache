@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 import os
 
-version = '0.1 svn'
+version = '0.1'
 
 setup(name='eea.cache',
       version=version,
