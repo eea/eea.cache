@@ -1,9 +1,12 @@
 from setuptools import setup, find_packages
 import os
+from os.path import join
 
-version = '0.2 svn'
+name = 'eea.cache'
+path = name.split('.') + ['version.txt']
+version = open(join(*path)).read().strip()
 
-setup(name='eea.cache',
+setup(name=name,
       version=version,
       description="Tools and config for memcache related caching",
       long_description=open("README.txt").read() + "\n" +
