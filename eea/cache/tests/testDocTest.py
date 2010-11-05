@@ -20,10 +20,13 @@ import unittest
 from zope.app  import component
 from zope.testing import doctest
 from zope.testing.doctestunit import DocFileSuite
-
+from zope.component import provideUtility
 
 from zope.app.testing.placelesssetup import setUp, tearDown
 from zope.configuration.xmlconfig import XMLConfig
+
+from lovely.memcached.interfaces import IMemcachedClient
+from fake import FakeMemcachedClient
 
 import eea.cache
 def eeaSetUp(test):
@@ -31,7 +34,7 @@ def eeaSetUp(test):
 
     XMLConfig('meta.zcml', component)()
     XMLConfig('configure.zcml', eea.cache)()
-
+    provideUtility(FakeMemcachedClient(), IMemcachedClient)
 
 def test_suite():
     level1Suites = (
@@ -42,5 +45,3 @@ def test_suite():
         ),
         )
     return unittest.TestSuite(level1Suites)
-
-
