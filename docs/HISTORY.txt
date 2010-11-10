@@ -1,10 +1,11 @@
 Changelog
 =========
 
-0.2-dev - (unreleased)
----------------------
+0.2 - (2010-11-10)
+------------------
 * Added fake memcache client in order to fix broken doctests [voineali]
 
 0.1 - (2009-11-10)
 ----------------
 * Initial release
+
