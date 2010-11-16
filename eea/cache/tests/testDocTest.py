@@ -39,7 +39,8 @@ def eeaSetUp(test):
 def test_suite():
     level1Suites = (
         DocFileSuite(
-            '../README.txt',
+            'README.txt',
+            package='eea.cache',
             optionflags=doctest.NORMALIZE_WHITESPACE|doctest.ELLIPSIS,
             setUp=eeaSetUp,tearDown=tearDown
         ),

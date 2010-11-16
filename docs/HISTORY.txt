@@ -3,6 +3,7 @@ Changelog
 
 0.3-dev - (unreleased)
 ----------------------
+* Fix tests namespace in order to be used within hudson [voineali #3821]
 
 0.2 - (2010-11-10)
 ------------------
