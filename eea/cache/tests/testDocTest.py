@@ -33,7 +33,7 @@ def eeaSetUp(test):
     setUp()
 
     XMLConfig('meta.zcml', component)()
-    XMLConfig('configure.zcml', eea.cache)()
+    XMLConfig('overrides.zcml', eea.cache)()
     provideUtility(FakeMemcachedClient(), IMemcachedClient)
 
 def test_suite():

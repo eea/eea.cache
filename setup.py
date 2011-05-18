@@ -28,6 +28,7 @@ setup(name=name,
       install_requires=[
           'setuptools',
           # -*- Extra requirements: -*-
+          'lovely.memcached',
       ],
       entry_points="""
       # -*- Entry points: -*-
