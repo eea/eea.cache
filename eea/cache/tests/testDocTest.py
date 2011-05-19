@@ -1,9 +1,8 @@
 """ Doctest
 """
 import unittest
+import doctest
 from zope.app  import component
-from zope.testing import doctest
-from zope.testing.doctestunit import DocFileSuite
 from zope.component import provideUtility
 from zope.app.testing.placelesssetup import setUp, tearDown
 from zope.configuration.xmlconfig import XMLConfig
@@ -27,8 +26,10 @@ def test_suite():
     """ Test suite
     """
     level1Suites = (
-        DocFileSuite('README.txt',
+        doctest.DocFileSuite('README.txt',
                      package='eea.cache',
                      optionflags=OPTIONFLAGS,
-                     setUp=eeaSetUp,tearDown=tearDown), )
+                     setUp=eeaSetUp,
+                     tearDown=tearDown),
+    )
     return unittest.TestSuite(level1Suites)
