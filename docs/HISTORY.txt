@@ -1,8 +1,9 @@
 Changelog
 =========
 
-0.4-dev - (unreleased)
+4.0-dev - (unreleased)
 ----------------------
+ * Feature: Plone 4.0.4 compatible release [ghicaale #4309]
 
 0.3 - (2010-11-22)
 ------------------
