@@ -10,7 +10,7 @@ class FakeMemcachedClient(MemcachedClient):
     implements(IMemcachedClient)
     _cache = {}
 
-    def invalidate(self, key=None, ns=None, raw=False, dependencies=[]):
+    def invalidate(self, key=None, ns=None, raw=False, dependencies=None):
         """ Invalidate
         """
         for key, value in self._cache.items():
@@ -25,8 +25,11 @@ class FakeMemcachedClient(MemcachedClient):
             return self._cache[key]['data']
         raise KeyError(key)
 
-    def set(self, data, key, lifetime=None, ns=None, raw=False, dependencies=[]):
+    def set(self, data, key, lifetime=None, ns=None,
+            raw=False, dependencies=None):
         """ Set
         """
+        if not dependencies:
+            dependencies = []
         self._cache[key] = { 'data': data,
                              'dependencies': dependencies }

@@ -64,8 +64,8 @@ class MemcacheAdapter(AbstractDict):
 def frontpageMemcached():
     """ Frontpage Memcached
     """
-    servers=os.environ.get(
-        "MEMCACHE_SERVER", "127.0.0.1:11211").split(",")
+    servers = os.environ.get("MEMCACHE_SERVER",
+                             "127.0.0.1:11211").split(",")
     return MemcachedClient(servers, defaultNS=u'frontpage')
 
 def choose_cache(fun_name):
@@ -99,10 +99,10 @@ def cache(get_key, dependencies=None):
             except volatile.DontCache:
                 return fun(*args, **kwargs)
             key = '%s.%s:%s' % (fun.__module__, fun.__name__, key)
-            cache = store_in_cache(fun, *args, **kwargs)
-            cached_value = cache.get(key, _marker)
+            cache_store = store_in_cache(fun, *args, **kwargs)
+            cached_value = cache_store.get(key, _marker)
             if cached_value is _marker:
-                cached_value = cache[key] = fun(*args, **kwargs)
+                cached_value = cache_store[key] = fun(*args, **kwargs)
             return cached_value
         return replacement
     return decorator
