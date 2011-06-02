@@ -2,7 +2,7 @@
 """
 import os
 import cPickle
-from hashlib import md5
+import hashlib
 from zope.interface import directlyProvides
 from zope.component import queryUtility
 from plone.memoize import volatile
@@ -41,7 +41,7 @@ class MemcacheAdapter(AbstractDict):
     def _make_key(self, source):
         """ Make key
         """
-        return md5.new(source).hexdigest()
+        return hashlib.md5(source).hexdigest()
 
     def __getitem__(self, key):
         """ __getitem__
