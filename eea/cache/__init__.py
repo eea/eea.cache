@@ -2,7 +2,7 @@
 """
 import os
 import cPickle
-import md5
+from hashlib import md5
 from zope.interface import directlyProvides
 from zope.component import queryUtility
 from plone.memoize import volatile
