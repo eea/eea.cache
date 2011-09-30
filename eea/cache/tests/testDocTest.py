@@ -4,7 +4,7 @@ import unittest
 import doctest
 from zope.app  import component
 from zope.component import provideUtility
-from zope.app.testing.placelesssetup import setUp, tearDown
+from zope.testing.module import setUp, tearDown
 from zope.configuration.xmlconfig import XMLConfig
 from lovely.memcached.interfaces import IMemcachedClient
 from eea.cache.tests.fake import FakeMemcachedClient
@@ -25,11 +25,9 @@ def eeaSetUp(test):
 def test_suite():
     """ Test suite
     """
-    level1Suites = (
-        doctest.DocFileSuite('README.txt',
-                     package='eea.cache',
-                     optionflags=OPTIONFLAGS,
-                     setUp=eeaSetUp,
-                     tearDown=tearDown),
-    )
+    level1Suites = ( doctest.DocFileSuite('README.txt',
+                                          package='eea.cache',
+                                          optionflags=OPTIONFLAGS,
+                                          setUp=eeaSetUp,
+                                          tearDown=tearDown), )
     return unittest.TestSuite(level1Suites)
