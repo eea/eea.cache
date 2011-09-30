@@ -4,14 +4,13 @@ eea.cache
 
 This package combines the features from lovely.memcached and plone.memoize.ram.
 It provides a decorator and utility for Memcaches at EEA.
-The decorator allows you set dependencies known by lovely.memcached 
+The decorator allows you set dependencies known by lovely.memcached
 
-cache decorator
+Cache decorator
 ===============
 
   >>> def key(method, self):
   ...     return method.__name__
-
 
   >>> from eea.cache import cache
   >>> @cache(key, dependencies=["frontpage"])
@@ -32,8 +31,6 @@ with dependency 'frontpage'.
   >>> myMethod(3)
   4
 
-
   >>> notify(InvalidateCacheEvent(raw=True, dependencies=['frontpage']))
   >>> myMethod(3)
-  9
-
+  4
