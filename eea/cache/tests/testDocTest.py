@@ -17,7 +17,7 @@ OPTIONFLAGS = (doctest.REPORT_ONLY_FIRST_FAILURE |
 def eeaSetUp(test):
     """ Setup
     """
-    setUp()
+    setUp(test)
     XMLConfig('meta.zcml', component)()
     XMLConfig('overrides.zcml', eea.cache)()
     provideUtility(FakeMemcachedClient(), IMemcachedClient)
