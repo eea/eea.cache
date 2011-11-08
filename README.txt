@@ -1,4 +1,4 @@
-EEA Daviz product
+EEA Cache product
 =================
 
 This package combines the features from lovely.memcached and plone.memoize.ram.
