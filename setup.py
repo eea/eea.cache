@@ -1,25 +1,27 @@
+""" EEA Cache Installer
+"""
 from setuptools import setup, find_packages
 import os
-from os.path import join
 
-name = 'eea.cache'
-path = name.split('.') + ['version.txt']
-version = open(join(*path)).read().strip()
+NAME = 'eea.cache'
+PATH = NAME.split('.') + ['version.txt']
+VERSION = open(os.path.join(*PATH)).read().strip()
 
-setup(name=name,
-      version=version,
+setup(name=NAME,
+      version=VERSION,
       description="Tools and config for memcache related caching",
       long_description=open("README.txt").read() + "\n" +
                        open(os.path.join("docs", "HISTORY.txt")).read(),
-      # Get more strings from http://www.python.org/pypi?%3Aaction=list_classifiers
       classifiers=[
-        "Programming Language :: Python",
-        "Topic :: Software Development :: Libraries :: Python Modules",
+          "Framework :: Plone",
+          "Programming Language :: Python",
+          "Topic :: Software Development :: Libraries :: Python Modules",
         ],
       keywords='plone cache eea',
-      author='Sasha Vincic',
-      author_email='sasha dot vincic at valentinewebsystems dot com',
-      url='https://svn.eionet.europa.eu/projects/Zope/browser/trunk',
+      author='Sasha Vincic, European Environment Agency (EEA)',
+      author_email='webadmin@eea.europa.eu',
+      url='http://svn.eionet.europa.eu/projects/'
+          'Zope/browser/trunk/eea.cache',
       license='GPL',
       packages=find_packages(exclude=['ez_setup']),
       namespace_packages=['eea'],
@@ -27,7 +29,7 @@ setup(name=name,
       zip_safe=False,
       install_requires=[
           'setuptools',
-          # -*- Extra requirements: -*-
+          'lovely.memcached',
       ],
       entry_points="""
       # -*- Entry points: -*-

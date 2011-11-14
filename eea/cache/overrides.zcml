@@ -1,13 +1,12 @@
 <configure xmlns="http://namespaces.zope.org/zope"
-           xmlns:browser="http://namespaces.zope.org/browser"
-           xmlns:five="http://namespaces.zope.org/five">
+           i18n_domain="eea">
 
    <subscriber handler="lovely.memcached.event.invalidateCache"/>
 
    <utility provides="lovely.memcached.interfaces.IMemcachedClient"
-	     factory=".frontpageMemcached" />
+            factory=".frontpageMemcached" />
 
    <utility component=".choose_cache"
-             provides="plone.memoize.interfaces.ICacheChooser" />
- 
+            provides="plone.memoize.interfaces.ICacheChooser" />
+
 </configure>
