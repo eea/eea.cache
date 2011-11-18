@@ -1,25 +1,25 @@
 Changelog
 =========
 
-4.0 - (2011-11-07)
+4.0 - (unreleased)
 ------------------
 
+4.0-dev - (2011-11-07)
+------------------
 * Feature: Plone 4.x compatible release
   [ghicaale #4309]
 
 0.3 - (2010-11-22)
 ------------------
-
 * Bug fix: fixed tests namespace in order to be used within hudson
   [voineali #3821]
 
 0.2 - (2010-11-10)
 ------------------
-
 * Bug fix: added fake memcache client in order to fix broken doctests
   [voineali]
 
 0.1 - (2009-11-10)
 ------------------
-
 * Initial release
+
