@@ -8,7 +8,7 @@ Changelog
 ------------------
  * no changes
 
-4.0-dev - (2011-11-07)
+4.0 - (2011-11-07)
 ------------------
 * Feature: Plone 4.x compatible release
   [ghicaale #4309]
