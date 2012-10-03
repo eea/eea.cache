@@ -112,9 +112,9 @@ Dependencies
 Source code
 ===========
 
-Latest source code (Plone 4 compatible):
-  - http://github.com/eea/eea.cache
-  - http://github.com/collective/eea.cache
+Latest source code (Zope 2 compatible):
+  - `Plone Collective on Github <https://github.com/collective/eea.cache>`_
+  - `EEA on Github <https://github.com/eea/eea.cache>`_
 
 
 Cache decorator

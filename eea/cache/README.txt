@@ -1,10 +1,20 @@
 =========
-eea.cache
+EEA Cache
 =========
-
 This package combines the features from lovely.memcached and plone.memoize.ram.
 It provides a decorator and utility for Memcaches at EEA.
 The decorator allows you set dependencies known by lovely.memcached
+
+.. contents::
+
+Usage
+=====
+
+.. note ::
+
+  This add-on doesn't do anything by itself. It needs to be integrated by a
+  developer within your own products. For reference you can check
+  the `eea.app.visualization`_ package.
 
 Cache decorator
 ===============
@@ -34,3 +44,12 @@ with dependency 'frontpage'.
   >>> notify(InvalidateCacheEvent(raw=True, dependencies=['frontpage']))
   >>> myMethod(3)
   4
+
+
+Authors
+=======
+
+  EEA_ - European Environment Agency (EU)
+
+.. _EEA: http://www.eea.europa.eu/
+.. _`eea.app.visualization`: http://eea.github.com/docs/eea.app.visualization
