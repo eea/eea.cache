@@ -3,6 +3,8 @@
 
 4.4-dev - (unreleased)
 ----------------------
+* Change: Updated README and egg's metadata
+  [voineali refs #5434]
 
 4.3 - (2012-07-13)
 ------------------
@@ -31,4 +33,3 @@
 0.1 - (2009-11-10)
 ------------------
 * Initial release
-
