@@ -1,8 +1,8 @@
 ﻿Changelog
 =========
 
-4.4-dev - (unreleased)
-----------------------
+5.0 - (2012-10-08)
+------------------
 * Change: Updated README and egg's metadata
   [voineali refs #5434]
 
@@ -33,3 +33,4 @@
 0.1 - (2009-11-10)
 ------------------
 * Initial release
+
