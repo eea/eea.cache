@@ -1,6 +1,9 @@
 ﻿Changelog
 =========
 
+5.1-dev - (unreleased)
+----------------------
+
 5.0 - (2012-10-08)
 ------------------
 * Change: Updated README and egg's metadata
