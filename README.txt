@@ -150,6 +150,13 @@ with dependency 'frontpage'.
   >>> myMethod(3)
   4
 
+Cache lifetime
+==============
+By default your content is cached in memcache for one hour (3600 seconds). You
+can change this by adding an **int** property within: ZMI > portal_properties >
+site_properties called **memcached_defaultLifetime** and set it's value to
+**86400** (one day) for example.
+
 
 Copyright and license
 =====================

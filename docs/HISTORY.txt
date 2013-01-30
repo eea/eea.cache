@@ -3,6 +3,13 @@ Changelog
 
 5.1-dev - (unreleased)
 ----------------------
+* Upgrade step: (optional)
+  Within ZMI > portal_properties > site_properties add an **int** property
+  called **memcached_defaultLifetime** and set it's value to
+  **86400** (one day) or any value that fits your needs.
+* Feature: Ability to set memcached default lifetime, which by now was hardcoded
+  to one hour (3600 seconds)
+  [voineali refs #13677]
 
 5.0 - (2012-10-08)
 ------------------

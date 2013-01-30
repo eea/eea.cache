@@ -12,6 +12,15 @@ from plone.memoize.ram import store_in_cache
 from lovely.memcached.utility import MemcachedClient
 from lovely.memcached.interfaces import IMemcachedClient
 
+try:
+    from Products.CMFCore import interfaces
+    IPropertiesTool = interfaces.IPropertiesTool
+except ImportError:
+    from zope.interface import Interface
+    class IPropertiesTool(Interface):
+        """ Fallback
+        """
+
 DEPENDENCIES = { 'frontpage-highlights':
                      ['Products.EEAContentTypes.browser.frontpage.getHigh',
                       'Products.EEAContentTypes.browser.frontpage.getMedium',
@@ -28,6 +37,16 @@ class MemcacheAdapter(AbstractDict):
     """ Memcache Adapter
     """
     def __init__(self, client, globalkey=''):
+        pt = queryUtility(IPropertiesTool)
+        st = getattr(pt, 'site_properties', None)
+        defaultLifetime = getattr(st, 'memcached_defaultLifetime',
+                                  client.defaultLifetime)
+        try:
+            defaultLifetime = int(defaultLifetime)
+        except Exception:
+            defaultLifetime = client.defaultLifetime
+
+        client.defaultLifetime = defaultLifetime
         self.client = client
 
         dependencies = []
