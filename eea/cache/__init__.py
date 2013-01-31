@@ -77,7 +77,6 @@ class MemcacheAdapter(AbstractDict):
         """ __setitem__
         """
         cached_value = cPickle.dumps(value)
-        #import pdb; pdb.set_trace()
         self.client.set(cached_value,
                         self._make_key(key),
                         lifetime=lifetime,
