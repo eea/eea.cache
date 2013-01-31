@@ -158,6 +158,20 @@ site_properties called **memcached_defaultLifetime** and set it's value to
 **86400** (one day) for example.
 
 
+Cache lifetime override per key
+-------------------------------
+
+Starting with eea.cache 5.1 you can also pass a lifetime key with the duration
+in seconds which will override the defaultLifetime either given from the 
+portal property or the default one from lovely.memcached of 3600 seconds
+
+  ::
+
+    ex: in order to cache the result only for 4 minutes
+    >>> @cache(key, dependencies=["frontpage"], lifetime=240)
+    ... def myMethod(num):
+    ...     return num*num
+
 Copyright and license
 =====================
 The Initial Owner of the Original Code is European Environment Agency (EEA).

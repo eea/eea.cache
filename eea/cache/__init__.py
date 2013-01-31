@@ -21,21 +21,23 @@ except ImportError:
         """ Fallback
         """
 
-DEPENDENCIES = { 'frontpage-highlights':
-                     ['Products.EEAContentTypes.browser.frontpage.getHigh',
-                      'Products.EEAContentTypes.browser.frontpage.getMedium',
-                      'Products.EEAContentTypes.browser.frontpage.getLow'],
-                 'navigation':
-                     ['Products.NavigationManager.NavigationManager.getTree',],
-                 'eea.facetednavigation':
-                     ['eea.facetednavigation.browser.app.query.__call__',
-                      'eea.facetednavigation.browser.app.counter.__call__',],
-                 'eea.sitestructurediff':
-                     ['eea.sitestructurediff.browser.sitemap.data',] }
+DEPENDENCIES = {'frontpage-highlights':
+                    ['Products.EEAContentTypes.browser.frontpage.getHigh',
+                     'Products.EEAContentTypes.browser.frontpage.getMedium',
+                     'Products.EEAContentTypes.browser.frontpage.getLow'],
+                'navigation':
+                    ['Products.NavigationManager.NavigationManager.getTree', ],
+                'eea.facetednavigation':
+                    ['eea.facetednavigation.browser.app.query.__call__',
+                     'eea.facetednavigation.browser.app.counter.__call__', ],
+                'eea.sitestructurediff':
+                    ['eea.sitestructurediff.browser.sitemap.data', ]}
+
 
 class MemcacheAdapter(AbstractDict):
     """ Memcache Adapter
     """
+
     def __init__(self, client, globalkey=''):
         pt = queryUtility(IPropertiesTool)
         st = getattr(pt, 'site_properties', None)
@@ -71,14 +73,17 @@ class MemcacheAdapter(AbstractDict):
         else:
             return cPickle.loads(cached_value)
 
-    def __setitem__(self, key, value):
+    def __setitem__(self, key, value, lifetime=None):
         """ __setitem__
         """
         cached_value = cPickle.dumps(value)
-        self.client.set( cached_value,
-                         self._make_key(key),
-                         raw=True,
-                         dependencies=self.dependencies)
+        #import pdb; pdb.set_trace()
+        self.client.set(cached_value,
+                        self._make_key(key),
+                        lifetime=lifetime,
+                        raw=True,
+                        dependencies=self.dependencies)
+
 
 def frontpageMemcached():
     """ Frontpage Memcached
@@ -87,22 +92,27 @@ def frontpageMemcached():
                              "127.0.0.1:11211").split(",")
     return MemcachedClient(servers, defaultNS=u'frontpage')
 
+
 def choose_cache(fun_name):
     """ Choose cache
     """
     client = queryUtility(IMemcachedClient)
     return MemcacheAdapter(client, globalkey=fun_name)
 
+
 directlyProvides(choose_cache, ICacheChooser)
 
-
 _marker = object()
-def cache(get_key, dependencies=None):
+
+
+def cache(get_key, dependencies=None, lifetime=None):
     """ Cache
     """
+
     def decorator(fun):
         """ Decorator
         """
+
         def replacement(*args, **kwargs):
             """ Replacement
             """
@@ -121,7 +131,10 @@ def cache(get_key, dependencies=None):
             cache_store = store_in_cache(fun, *args, **kwargs)
             cached_value = cache_store.get(key, _marker)
             if cached_value is _marker:
-                cached_value = cache_store[key] = fun(*args, **kwargs)
+                cached_value = fun(*args, **kwargs)
+                cache_store.__setitem__(key, cached_value, lifetime=lifetime)
             return cached_value
+
         return replacement
+
     return decorator
