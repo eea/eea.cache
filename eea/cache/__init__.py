@@ -131,7 +131,14 @@ def cache(get_key, dependencies=None, lifetime=None):
             cached_value = cache_store.get(key, _marker)
             if cached_value is _marker:
                 cached_value = fun(*args, **kwargs)
-                cache_store.__setitem__(key, cached_value, lifetime=lifetime)
+                # plone.memoize doesn't have the lifetime keyword parameter
+                # like lovely.memcached does so we check for the module name
+                if 'eea.cache' in cache_store.__module__:
+                    cache_store.__setitem__(key, cached_value, 
+                                                            lifetime=lifetime)
+                else:
+                    cache_store.__setitem__(key, cached_value)
+
             return cached_value
 
         return replacement
