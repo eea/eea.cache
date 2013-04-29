@@ -3,12 +3,14 @@ Changelog
 
 5.2-dev - (unreleased)
 ----------------------
+* Feature: Removed lovely.memcached dependency
+  [voineali refs #14343]
 
 5.1 - (2013-02-04)
 ------------------
 * Feature: added information for contributors
   [ciobabog refs #13892]
-* Feature: added ability to pass a lifetime key to the cache decorator in 
+* Feature: added ability to pass a lifetime key to the cache decorator in
   order to cache it for a determined period different from the default lifetime
   [ichimdav #13677]
 * Upgrade step: (optional)
