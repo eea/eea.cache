@@ -1,9 +1,9 @@
 <configure xmlns="http://namespaces.zope.org/zope"
            i18n_domain="eea">
 
-   <subscriber handler="lovely.memcached.event.invalidateCache"/>
+   <subscriber handler=".event.invalidateCache"/>
 
-   <utility provides="lovely.memcached.interfaces.IMemcachedClient"
+   <utility provides=".interfaces.IMemcachedClient"
             factory=".frontpageMemcached" />
 
    <utility component=".choose_cache"

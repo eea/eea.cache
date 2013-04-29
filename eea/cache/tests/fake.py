@@ -1,8 +1,8 @@
 """ Fake
 """
 from zope.interface import implements
-from lovely.memcached.utility import MemcachedClient
-from lovely.memcached.interfaces import IMemcachedClient
+from eea.cache.utility import MemcachedClient
+from eea.cache.interfaces import IMemcachedClient
 
 class FakeMemcachedClient(MemcachedClient):
     """ Fake Memcached Client

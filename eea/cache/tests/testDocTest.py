@@ -6,7 +6,7 @@ from zope.app  import component
 from zope.component import provideUtility
 from zope.testing.module import setUp, tearDown
 from zope.configuration.xmlconfig import XMLConfig
-from lovely.memcached.interfaces import IMemcachedClient
+from eea.cache.interfaces import IMemcachedClient
 from eea.cache.tests.fake import FakeMemcachedClient
 import eea.cache
 

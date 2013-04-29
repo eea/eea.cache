@@ -29,7 +29,7 @@ Cache decorator
 
 Lets clear any running memcache
 
-  >>> from lovely.memcached.event import InvalidateCacheEvent
+  >>> from eea.cache.event import InvalidateCacheEvent
   >>> from zope.event import notify
   >>> notify(InvalidateCacheEvent(raw=True, dependencies=['frontpage']))
 

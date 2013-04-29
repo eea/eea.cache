@@ -39,7 +39,6 @@ setup(name=NAME,
       zip_safe=False,
       install_requires=[
         'setuptools',
-        'lovely.memcached',
       ],
       extras_require={
         'test': ['plone.app.testing']

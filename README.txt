@@ -11,7 +11,7 @@ Introduction
 
 This package combines the features from lovely.memcached and plone.memoize.ram.
 It provides a decorator and utility for Memcaches at EEA.
-The decorator allows you set dependencies known by lovely.memcached
+The decorator allows you set dependencies known by eea.cache
 
 .. note ::
 
@@ -110,7 +110,6 @@ Dependencies
 
 `EEA Cache`_ has the following dependencies:
   - Plone 4+
-  - lovely.memcached
 
 
 Source code
@@ -134,7 +133,7 @@ Cache decorator
 
 Lets clear any running memcache
 
-  >>> from lovely.memcached.event import InvalidateCacheEvent
+  >>> from eea.cache.event import InvalidateCacheEvent
   >>> from zope.event import notify
   >>> notify(InvalidateCacheEvent(raw=True, dependencies=['frontpage']))
 
@@ -162,7 +161,7 @@ Cache lifetime override per key
 -------------------------------
 
 Starting with eea.cache 5.1 you can also pass a lifetime key with the duration
-in seconds which will override the defaultLifetime either given from the 
+in seconds which will override the defaultLifetime either given from the
 portal property or the default one from lovely.memcached of 3600 seconds
 
   ::

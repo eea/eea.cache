@@ -9,8 +9,8 @@ from plone.memoize import volatile
 from plone.memoize.interfaces import ICacheChooser
 from plone.memoize.ram import AbstractDict
 from plone.memoize.ram import store_in_cache
-from lovely.memcached.utility import MemcachedClient
-from lovely.memcached.interfaces import IMemcachedClient
+from eea.cache.utility import MemcachedClient
+from eea.cache.interfaces import IMemcachedClient
 
 try:
     from Products.CMFCore import interfaces
@@ -132,9 +132,9 @@ def cache(get_key, dependencies=None, lifetime=None):
             if cached_value is _marker:
                 cached_value = fun(*args, **kwargs)
                 # plone.memoize doesn't have the lifetime keyword parameter
-                # like lovely.memcached does so we check for the module name
+                # like eea.cache does so we check for the module name
                 if 'eea.cache' in cache_store.__module__:
-                    cache_store.__setitem__(key, cached_value, 
+                    cache_store.__setitem__(key, cached_value,
                                                             lifetime=lifetime)
                 else:
                     cache_store.__setitem__(key, cached_value)
