@@ -3,6 +3,8 @@ Changelog
 
 6.1-dev - (unreleased)
 ----------------------
+* Cleanup: Use logger.debug instead of logger.info for debug messages
+  [avoinea]
 
 6.0 - (2013-05-20)
 ------------------

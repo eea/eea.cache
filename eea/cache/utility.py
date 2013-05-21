@@ -79,7 +79,7 @@ class MemcachedClient(persistent.Persistent):
             data = cPickle.dumps(data)
         elif not isinstance(data, str):
             raise ValueError, data
-        log.info('set: %r, %r, %r, %r', key, len(data), ns, lifetime)
+        log.debug('set: %r, %r, %r, %r', key, len(data), ns, lifetime)
 
         bKey = self._buildKey(key, ns, raw=raw)
         if self.client.set(bKey, data, lifetime):
@@ -227,7 +227,7 @@ class MemcachedClient(persistent.Persistent):
         key = (tuple(self.servers), self.trackKeys)
         storage = self._storages().get(key)
         if storage is None:
-            log.info('Creating new local storage with key %r', key)
+            log.debug('Creating new local storage with key %r', key)
             storage = self._storages()[key] = Storage()
         if self.trackKeys and not hasattr(storage, 'keys'):
             tName = threading.currentThread().getName()
@@ -247,7 +247,7 @@ class MemcachedClient(persistent.Persistent):
     def _keysInit(self, storage, uid, clients=None):
         """ init key
         """
-        log.info('Init of keytracking uid: %r', uid)
+        log.debug('Init of keytracking uid: %r', uid)
         storage.keys = {}
         storage.uid = uid
         storage.dirtyKeys = set()
@@ -255,7 +255,7 @@ class MemcachedClient(persistent.Persistent):
         if clients is None:
             clients = self._getClients()
         if not storage.uid in clients:
-            log.info('Adding new client uid: %r', storage.uid)
+            log.debug('Adding new client uid: %r', storage.uid)
             clients.add(storage.uid)
             self.set(clients, 'clients', lifetime=0, ns=NS)
         return clients
