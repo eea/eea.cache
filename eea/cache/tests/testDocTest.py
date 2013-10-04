@@ -2,7 +2,7 @@
 """
 import unittest
 import doctest
-from zope.app  import component
+from zope import component
 from zope.component import provideUtility
 from zope.testing.module import setUp, tearDown
 from zope.configuration.xmlconfig import XMLConfig
