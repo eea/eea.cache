@@ -7,7 +7,7 @@ Changelog
 6.2 - (2013-10-04)
 ------------------
 * Change: updated zope imports with the versions that require minimum Plone 4.1
-  for eea.cache 
+  for eea.cache
   [ichimdav refs #15651]
 
 6.1 - (2013-06-17)
