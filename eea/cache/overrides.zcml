@@ -1,6 +1,8 @@
 <configure xmlns="http://namespaces.zope.org/zope"
            i18n_domain="eea">
 
+   <include file="documentation.zcml" />
+
    <subscriber handler=".event.invalidateCache"/>
 
    <utility provides=".interfaces.IMemcachedClient"
