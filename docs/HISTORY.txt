@@ -3,6 +3,8 @@ Changelog
 
 6.3-dev - (unreleased)
 ----------------------
+* Bug fix: removed wrongly added blockquotes within README.rst
+  [ichim-david refs #18064]
 * Feature: adding Sphinx-generated documentation in Page Template format
   [batradav refs #9502]
 
