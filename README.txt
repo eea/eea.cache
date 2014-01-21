@@ -123,31 +123,31 @@ Latest source code (Zope 2 compatible):
 Cache decorator
 ===============
 
-  >>> def key(method, self):
-  ...     return method.__name__
+>>> def key(method, self):
+...     return method.__name__
 
-  >>> from eea.cache import cache
-  >>> @cache(key, dependencies=["frontpage"])
-  ... def myMethod(num):
-  ...     return num*num
+>>> from eea.cache import cache
+>>> @cache(key, dependencies=["frontpage"])
+... def myMethod(num):
+...     return num*num
 
 Lets clear any running memcache
 
-  >>> from eea.cache.event import InvalidateCacheEvent
-  >>> from zope.event import notify
-  >>> notify(InvalidateCacheEvent(raw=True, dependencies=['frontpage']))
+>>> from eea.cache.event import InvalidateCacheEvent
+>>> from zope.event import notify
+>>> notify(InvalidateCacheEvent(raw=True, dependencies=['frontpage']))
 
 Our myMethod will now be cached with the key returned from the method 'key' and
 with dependency 'frontpage'.
 
-  >>> myMethod(2)
-  4
-  >>> myMethod(3)
-  4
+>>> myMethod(2)
+4
+>>> myMethod(3)
+4
 
-  >>> notify(InvalidateCacheEvent(raw=True, dependencies=['frontpage']))
-  >>> myMethod(3)
-  4
+>>> notify(InvalidateCacheEvent(raw=True, dependencies=['frontpage']))
+>>> myMethod(3)
+4
 
 Cache lifetime
 ==============
@@ -164,7 +164,7 @@ Starting with eea.cache 5.1 you can also pass a lifetime key with the duration
 in seconds which will override the defaultLifetime either given from the
 portal property or the default one from lovely.memcached of 3600 seconds
 
-  ::
+::
 
     ex: in order to cache the result only for 4 minutes
     >>> @cache(key, dependencies=["frontpage"], lifetime=240)
