@@ -1,5 +1,5 @@
 
-<tal:block define="context python: request.PARENTS[-2]; here nocall:context">
+<tal:block define="context python: request.PARENTS[1]; here nocall:context">
 <html metal:use-macro="context/main_template/macros/master"
       i18n:domain="plone">
 
@@ -18,6 +18,7 @@
   <link href='http://fonts.googleapis.com/css?family=Crete+Round' rel='stylesheet' type='text/css'>
   <link rel="stylesheet" href="_static/sphinx-bootstrap.css" type="text/css"/>
   <link rel="stylesheet" href="_static/pygments.css" type="text/css"/>
+  <link rel="stylesheet" href="_static/theme.css" type="text/css"/>
 </metal:styleslot>
 <metal:javascriptslot fill-slot="javascript_head_slot">
   <script type="text/javascript">
@@ -234,13 +235,11 @@ site_properties called <strong>memcached_defaultLifetime</strong> and set it&#82
 <p>Starting with eea.cache 5.1 you can also pass a lifetime key with the duration
 in seconds which will override the defaultLifetime either given from the
 portal property or the default one from lovely.memcached of 3600 seconds</p>
-<blockquote>
-<div><div class="highlight-python"><pre>ex: in order to cache the result only for 4 minutes
+<div class="highlight-python"><pre>ex: in order to cache the result only for 4 minutes
 &gt;&gt;&gt; @cache(key, dependencies=["frontpage"], lifetime=240)
 ... def myMethod(num):
 ...     return num*num</pre>
 </div>
-</div></blockquote>
 </div>
 </div>
 <div class="section" id="copyright-and-license">
@@ -280,44 +279,6 @@ version.</p>
         </div>
     </div>
 </metal:main>
-
-<metal:right-portlet fill-slot="portlets_two_slot">
-      <div class="span3">
-          
-        <div class="sphinxsidebar">
-            <div class="sphinxsidebarwrapper">
-  <h3><a href="#">Table Of Contents</a></h3>
-  <ul>
-<li><a class="reference internal" href="#">EEA Cache</a><ul>
-<li><a class="reference internal" href="#introduction">Introduction</a></li>
-<li><a class="reference internal" href="#contents">Contents</a></li>
-<li><a class="reference internal" href="#installation">Installation</a><ul>
-<li><a class="reference internal" href="#zc-buildout">zc.buildout</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#dependencies">Dependencies</a></li>
-<li><a class="reference internal" href="#source-code">Source code</a></li>
-<li><a class="reference internal" href="#cache-decorator">Cache decorator</a></li>
-<li><a class="reference internal" href="#cache-lifetime">Cache lifetime</a><ul>
-<li><a class="reference internal" href="#cache-lifetime-override-per-key">Cache lifetime override per key</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#copyright-and-license">Copyright and license</a></li>
-<li><a class="reference internal" href="#funding-and-project-management">Funding and project management</a></li>
-</ul>
-</li>
-</ul>
-
-  <h3>This Page</h3>
-  <ul class="this-page-menu">
-    <li><a href="_sources/index.txt"
-           rel="nofollow">Show Source</a></li>
-  </ul>
-            </div>
-        </div>
-      </div>
-  
-</metal:right-portlet>
 
 </body>
 </html>
