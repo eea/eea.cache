@@ -1,0 +1,12 @@
+<configure
+  xmlns="http://namespaces.zope.org/zope"
+  xmlns:browser="http://namespaces.zope.org/browser"
+  i18n_domain="eea">
+
+  <browser:page
+    name="memcache.invalidate"
+    for="eea.cache.interfaces.ICacheAware"
+    class=".app.view.InvalidateMemCache"
+    permission="eea.cache.invalidate" />
+
+</configure>

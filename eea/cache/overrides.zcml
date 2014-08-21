@@ -1,12 +1,11 @@
-<configure xmlns="http://namespaces.zope.org/zope"
-           i18n_domain="eea">
+<configure
+  xmlns="http://namespaces.zope.org/zope"
+  i18n_domain="eea">
 
-   <subscriber handler=".event.invalidateCache"/>
+  <utility provides=".interfaces.IMemcachedClient"
+           factory=".frontpageMemcached" />
 
-   <utility provides=".interfaces.IMemcachedClient"
-            factory=".frontpageMemcached" />
-
-   <utility component=".choose_cache"
-            provides="plone.memoize.interfaces.ICacheChooser" />
+  <utility component=".choose_cache"
+           provides="plone.memoize.interfaces.ICacheChooser" />
 
 </configure>

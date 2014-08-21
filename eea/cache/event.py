@@ -17,7 +17,6 @@ class InvalidateCacheEvent(object):
         self.raw = raw
         self.dependencies = dependencies or []
 
-@component.adapter(IInvalidateCacheEvent)
 def invalidateCache(event):
     """ Invalidate cache
     """
@@ -34,3 +33,46 @@ def invalidateCache(event):
         else:
             cache.invalidate(event.key, event.ns, True, event.dependencies)
             cache.invalidate(event.key, event.ns, False, event.dependencies)
+
+def flush(obj, evt):
+    """ Purge memcache on ObjectModifiedEvent
+    """
+    request = getattr(obj, 'REQUEST', None)
+    if not request:
+        return
+
+    invalidate = component.queryMultiAdapter((obj, request),
+                     name=u'memcache.invalidate')
+    if not invalidate:
+        return
+
+    return invalidate()
+
+
+def flush_relatedItems(obj, evt):
+    """ Purge memcache for all related items
+    """
+    request = getattr(obj, 'REQUEST', None)
+    if not request:
+        return
+
+    invalidate = component.queryMultiAdapter((obj, request),
+                     name=u'memcache.invalidate')
+    if not invalidate:
+        return
+
+    return invalidate.relatedItems()
+
+def flush_backRefs(obj, evt):
+    """ Purge memcache for all back references
+    """
+    request = getattr(obj, 'REQUEST', None)
+    if not request:
+        return
+
+    invalidate = component.queryMultiAdapter((obj, request),
+                     name=u'memcache.invalidate')
+    if not invalidate:
+        return
+
+    return invalidate.backRefs()

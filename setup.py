@@ -40,6 +40,8 @@ setup(name=NAME,
       install_requires=[
         'setuptools',
         'python-memcached',
+        'plone.memoize',
+        'plone.uuid',
       ],
       extras_require={
         'test': ['plone.app.testing']

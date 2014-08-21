@@ -4,11 +4,12 @@ import os
 import cPickle
 import hashlib
 from zope.interface import directlyProvides
-from zope.component import queryUtility
+from zope.component import queryUtility, queryAdapter
 from plone.memoize import volatile
 from plone.memoize.interfaces import ICacheChooser
 from plone.memoize.ram import AbstractDict
 from plone.memoize.ram import store_in_cache
+from plone.uuid.interfaces import IUUID
 from eea.cache.utility import MemcachedClient
 from eea.cache.interfaces import IMemcachedClient
 
@@ -20,19 +21,6 @@ except ImportError:
     class IPropertiesTool(Interface):
         """ Fallback
         """
-
-DEPENDENCIES = {'frontpage-highlights':
-                    ['Products.EEAContentTypes.browser.frontpage.getHigh',
-                     'Products.EEAContentTypes.browser.frontpage.getMedium',
-                     'Products.EEAContentTypes.browser.frontpage.getLow'],
-                'navigation':
-                    ['Products.NavigationManager.NavigationManager.getTree', ],
-                'eea.facetednavigation':
-                    ['eea.facetednavigation.browser.app.query.__call__',
-                     'eea.facetednavigation.browser.app.counter.__call__', ],
-                'eea.sitestructurediff':
-                    ['eea.sitestructurediff.browser.sitemap.data', ]}
-
 
 class MemcacheAdapter(AbstractDict):
     """ Memcache Adapter
@@ -51,14 +39,6 @@ class MemcacheAdapter(AbstractDict):
         client.defaultLifetime = defaultLifetime
         self.client = client
 
-        dependencies = []
-        if globalkey:
-            for k, v in DEPENDENCIES.items():
-                if globalkey in v:
-                    dependencies.append(k)
-
-        self.dependencies = dependencies
-
     def _make_key(self, source):
         """ Make key
         """
@@ -73,16 +53,26 @@ class MemcacheAdapter(AbstractDict):
         else:
             return cPickle.loads(cached_value)
 
-    def __setitem__(self, key, value, lifetime=None):
+    def __setitem__(self, key, value):
         """ __setitem__
         """
+        return self.set(key, value)
+
+    def set(self, key, value, lifetime=None, dependencies=None):
+        """ Set
+        :param key: dict key
+        :param value: dict value
+        :param lifetime: cache lifetime
+        :param dependencies: cache dependencies
+        :return: None
+        """
+        dependencies = dependencies or []
         cached_value = cPickle.dumps(value)
         self.client.set(cached_value,
                         self._make_key(key),
                         lifetime=lifetime,
                         raw=True,
-                        dependencies=self.dependencies)
-
+                        dependencies=dependencies)
 
 def frontpageMemcached():
     """ Frontpage Memcached
@@ -104,8 +94,23 @@ directlyProvides(choose_cache, ICacheChooser)
 _marker = object()
 
 
-def cache(get_key, dependencies=None, lifetime=None):
-    """ Cache
+def uuid(self=None, *args, **kwargs):
+    """
+    :param self: class or module where cache decorator was used
+    :return: empty list or a list with one element containing object UID
+    """
+    context = getattr(self, 'context', self)
+    return queryAdapter(context, IUUID)
+
+def cache(get_key, dependencies=None, lifetime=None, auto_invalidate=True):
+    """ Cache decorator
+
+    :param get_key: a unique key to be used within cache
+    :param dependencies: a list of strings used to bulk invalidate cache
+    :param lifetime: time in seconds to be stored within cache
+    :param auto_invalidate: invalidate cache when modified event is triggered
+    :return: decorated function
+
     """
 
     def decorator(fun):
@@ -115,13 +120,6 @@ def cache(get_key, dependencies=None, lifetime=None):
         def replacement(*args, **kwargs):
             """ Replacement
             """
-            if dependencies is not None:
-                for d in dependencies:
-                    deps = DEPENDENCIES.get(d, [])
-                    method = "%s.%s" % (fun.__module__, fun.__name__)
-                    if method not in deps:
-                        deps.append(method)
-                        DEPENDENCIES[d] = deps
             try:
                 key = get_key(fun, *args, **kwargs)
             except volatile.DontCache:
@@ -131,16 +129,21 @@ def cache(get_key, dependencies=None, lifetime=None):
             cached_value = cache_store.get(key, _marker)
             if cached_value is _marker:
                 cached_value = fun(*args, **kwargs)
+
                 # plone.memoize doesn't have the lifetime keyword parameter
-                # like eea.cache does so we check for the module name
-                if 'eea.cache' in cache_store.__module__:
-                    cache_store.__setitem__(key, cached_value,
-                                                            lifetime=lifetime)
+                # like eea.cache does so we check for set method
+                if getattr(cache_store, 'set', None):
+                    deps = dependencies or []
+                    deps = deps[:]
+                    if auto_invalidate:
+                        uid = uuid(*args, **kwargs)
+                        if uid and uid not in deps:
+                            deps.append(uid)
+                    cache_store.set(key, cached_value,
+                                    lifetime=lifetime, dependencies=deps)
                 else:
-                    cache_store.__setitem__(key, cached_value)
+                    cache_store[key] = cached_value
 
             return cached_value
-
         return replacement
-
     return decorator

@@ -2,6 +2,7 @@
 """
 from zope import interface
 from zope import schema
+from eea.cache.subtypes.interfaces import ICacheAware
 
 class IMemcachedClient(interface.Interface):
     """A memcache client utility
@@ -115,3 +116,9 @@ class IInvalidateCacheEvent(interface.Interface):
         title = u'Dependencies',
         required = False,
     )
+
+__all__ = [
+    ICacheAware.__name__,
+    IInvalidateCacheEvent.__name__,
+    IMemcachedClient.__name__,
+]

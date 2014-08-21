@@ -56,6 +56,7 @@ recipe to manage your project, you can do this:
 
     zcml =
       ...
+      eea.cache
       eea.cache-overrides
 
 
