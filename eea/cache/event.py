@@ -48,16 +48,16 @@ def flush(obj, evt):
 
     return invalidate()
 
-def flushRelatedItems(obj, evt, all=True):
+def flushRelatedItems(obj, evt, everything=True):
     """ Purge related items from memcache and varnish
 
-    If all is false, purge object only from memcache
+    If everything is False, purge object only from memcache
     """
     request = getattr(obj, 'REQUEST', None)
     if not request:
         return
 
-    if all:
+    if everything:
         invalidate = component.queryMultiAdapter((obj, request),
                                                 name=u'cache.invalidate')
     else:
@@ -66,16 +66,16 @@ def flushRelatedItems(obj, evt, all=True):
     if invalidate:
         invalidate.relatedItems()
 
-def flushBackRefs(obj, evt, all=True):
+def flushBackRefs(obj, evt, everything=True):
     """ Purge back references from memcache and varnish.
 
-    If all is False, purge object only from memcache
+    If everything is False, purge object only from memcache
     """
     request = getattr(obj, 'REQUEST', None)
     if not request:
         return
 
-    if all:
+    if everything:
         invalidate = component.queryMultiAdapter((obj, request),
                                                 name=u'cache.invalidate')
     else:
