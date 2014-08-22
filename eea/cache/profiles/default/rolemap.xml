@@ -2,7 +2,6 @@
 <rolemap>
   <permissions>
     <permission name="eea.cache: Invalidate" acquire="True">
-      <role name="Contributor" />
       <role name="Manager"/>
       <role name="Owner"/>
       <role name="Editor"/>
