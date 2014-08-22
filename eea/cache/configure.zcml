@@ -11,9 +11,7 @@
   <include package=".browser" />
   <include package=".subtypes" />
 
-  <subscriber
-    for="eea.cache.interfaces.IInvalidateCacheEvent"
-    handler=".event.invalidateCache" />
+  <subscriber handler=".event.invalidateCache" />
 
   <subscriber
     for="eea.cache.interfaces.ICacheAware

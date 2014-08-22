@@ -17,6 +17,7 @@ class InvalidateCacheEvent(object):
         self.raw = raw
         self.dependencies = dependencies or []
 
+@component.adapter(IInvalidateCacheEvent)
 def invalidateCache(event):
     """ Invalidate cache
     """
