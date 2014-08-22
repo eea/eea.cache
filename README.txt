@@ -24,32 +24,23 @@ Contents
 
 .. contents::
 
+Main features
+=============
 
-Installation
-============
+1. Extends and overrides plone.memoize cache adapters to work with memcache
+2. Provides an extended @cache decorator that supports:
 
-zc.buildout
------------
-If you are using `zc.buildout`_ and the `plone.recipe.zope2instance`_
-recipe to manage your project, you can do this:
+   * cache lifetime override per method
+   * dependencies string in order to bulk invalidate cache
+   * auto-invalidation of cache when ObjectModifiedEvent is triggered
 
-* Update your buildout.cfg file:
+3. Possibility to manually invalidate cache via URL.
 
-  * Add ``eea.cache`` to the list of eggs to install
-  * Tell the `plone.recipe.zope2instance`_ recipe to install a ZCML slug
-  * Add memcache
+Install
+=======
 
-  ::
+* Add eea.cache to your eggs and zcml section in your buildout and re-run buildout::
 
-    parts +=
-      libevent
-      memcached
-      memcached-ctl
-
-    effective-user = zope-www
-
-    [instance]
-    ...
     eggs =
       ...
       eea.cache
@@ -59,96 +50,58 @@ recipe to manage your project, you can do this:
       eea.cache
       eea.cache-overrides
 
+* You can download a sample buildout from https://github.com/eea/eea.cache/tree/master/buildouts/plone4
+* Install eea.cache within Site Setup > Add-ons
+* Start memcache::
 
-    [libevent]
-    recipe = zc.recipe.cmmi
-    url = http://www.monkey.org/~provos/libevent-1.4.8-stable.tar.gz
-
-    [memcached]
-    recipe = zc.recipe.cmmi
-    url = http://www.danga.com/memcached/dist/memcached-1.2.6.tar.gz
-    extra_options = --with-libevent=${libevent:location}
-
-    [memcached-ctl]
-    recipe = lovely.recipe:mkfile
-    path = ${buildout:bin-directory}/memcached
-    mode = 0755
-    content =
-     #!/bin/sh
-     export LD_LIBRARY_PATH=${libevent:location}/lib
-
-     PIDFILE=${memcached:location}/memcached.pid
-        case "$1" in
-          start)
-           ${memcached:location}/bin/memcached -d -u ${buildout:effective-user} -P $PIDFILE
-            ;;
-          stop)
-            kill `cat $PIDFILE`
-            ;;
-          restart|force-reload)
-            $0 stop
-            sleep 1
-            $0 start
-            ;;
-          *)
-            echo "Usage: $SCRIPTNAME {start|stop|restart}" >&2
-            exit 1
-            ;;
-        esac
-
-* Re-run buildout, e.g. with::
-
-  $ bin/buildout -c buildout.cfg
-
-* Restart memcache and Zope::
-
-  $ bin/memcached restart
-  $ bin/instance restart
-
+  $ bin/memcached start
 
 Dependencies
 ============
 
-`EEA Cache`_ has the following dependencies:
-  - Plone 4+
+* `python-memcached`_
+* `plone.memoize`_
+* `plone.uuid`_
 
 
 Source code
 ===========
 
 Latest source code (Zope 2 compatible):
-  - `Plone Collective on Github <https://github.com/collective/eea.cache>`_
-  - `EEA on Github <https://github.com/eea/eea.cache>`_
+  * `Plone Collective on Github <https://github.com/collective/eea.cache>`_
+  * `EEA on Github <https://github.com/eea/eea.cache>`_
 
 
 Cache decorator
 ===============
 
->>> def key(method, self):
-...     return method.__name__
+::
 
->>> from eea.cache import cache
->>> @cache(key, dependencies=["frontpage"])
-... def myMethod(num):
-...     return num*num
+    >>> def key(method, self):
+    ...     return method.__name__
 
-Lets clear any running memcache
+    >>> from eea.cache import cache
+    >>> @cache(key, dependencies=["frontpage"])
+    ... def myMethod(num):
+    ...     return num*num
 
->>> from eea.cache.event import InvalidateCacheEvent
->>> from zope.event import notify
->>> notify(InvalidateCacheEvent(raw=True, dependencies=['frontpage']))
+Lets clear any running memcache::
+
+    >>> from eea.cache.event import InvalidateCacheEvent
+    >>> from zope.event import notify
+    >>> notify(InvalidateCacheEvent(raw=True, dependencies=['frontpage']))
 
 Our myMethod will now be cached with the key returned from the method 'key' and
-with dependency 'frontpage'.
+with dependency 'frontpage'::
 
->>> myMethod(2)
-4
->>> myMethod(3)
-4
+    >>> myMethod(2)
+    4
+    >>> myMethod(3)
+    4
 
->>> notify(InvalidateCacheEvent(raw=True, dependencies=['frontpage']))
->>> myMethod(3)
-4
+    >>> notify(InvalidateCacheEvent(raw=True, dependencies=['frontpage']))
+    >>> myMethod(3)
+    9
 
 Cache lifetime
 ==============
@@ -163,14 +116,56 @@ Cache lifetime override per key
 
 Starting with eea.cache 5.1 you can also pass a lifetime key with the duration
 in seconds which will override the defaultLifetime either given from the
-portal property or the default one from lovely.memcached of 3600 seconds
-
-::
+portal property or the default one from lovely.memcached of 3600 seconds::
 
     ex: in order to cache the result only for 4 minutes
     >>> @cache(key, dependencies=["frontpage"], lifetime=240)
     ... def myMethod(num):
     ...     return num*num
+
+
+Invalidate cache
+================
+If you use cache decorator for BrowserView methods or directly on Zope objects
+methods cache will be **automatically invalidated** when object is modified
+(ObjectModifiedEvent is triggered)::
+
+    >>> from Products.Five.browser import BrowserView
+
+    >>> class XXX(BrowserView):
+    ...     @cache(key)
+    ...     def title(self):
+    ...         return self.context.title_or_id()
+
+You can disable auto invalidation by providing the auto_invalidate param to @cache
+decorator::
+
+    >>> @cache(key, auto_invalidate=False)
+    ... def title(self):
+    ...     return self.context.title_or_id()
+
+memcache.invalidate
+-------------------
+In order to manually invalidate cache per object this package provide a browser
+view called **memcache.invalidate**. It will invalidate all memcached methods
+associated with current object's UID::
+
+    http://localhost:2020/Plone/front-page/memcache.invalidate
+
+You can also manually invalidate related items and back references::
+
+    http://localhost:2020/Plone/front-page/memcache.invalidate/relatedItems
+
+    http://localhost:2020/Plone/front-page/memcache.invalidate/backRefs
+
+By default this method can be called by users with these roles:
+
+* Editor
+* CommonEditor
+* Contributor
+* Owner
+* Manager
+
 
 Copyright and license
 =====================
@@ -195,3 +190,6 @@ EEA_ - European Environment Agency (EU)
 .. _`EEA Cache`: http://eea.github.com/docs/eea.cache
 .. _`plone.recipe.zope2instance`: http://pypi.python.org/pypi/plone.recipe.zope2instance
 .. _`eea.app.visualization`: http://eea.github.com/docs/eea.app.visualization
+.. _`plone.memoize`: http://pypi.python.org/pypi/plone.memoize
+.. _`plone.uuid`: http://pypi.python.org/pypi/plone.uuid
+.. _`python-memcached`: http://pypi.python.org/pypi/python-memcached
