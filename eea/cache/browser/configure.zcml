@@ -10,4 +10,11 @@
     allowed_attributes="relatedItems backRefs"
     permission="eea.cache.invalidate" />
 
+  <browser:page
+    name="cache.invalidate"
+    for="eea.cache.interfaces.ICacheAware"
+    class=".app.view.InvalidateCache"
+    allowed_attributes="relatedItems backRefs"
+    permission="eea.cache.invalidate" />
+
 </configure>

@@ -146,9 +146,9 @@ decorator::
 
 memcache.invalidate
 -------------------
-In order to manually invalidate cache per object this package provide a browser
-view called **memcache.invalidate**. It will invalidate all memcached methods
-associated with current object's UID::
+In order to manually invalidate memcached cache per object this package
+provides a browser view called **memcache.invalidate**.
+It will invalidate all memcached methods associated with current object's UID::
 
     http://localhost:2020/Plone/front-page/memcache.invalidate
 
@@ -157,6 +157,28 @@ You can also manually invalidate related items and back references::
     http://localhost:2020/Plone/front-page/memcache.invalidate/relatedItems
 
     http://localhost:2020/Plone/front-page/memcache.invalidate/backRefs
+
+By default this method can be called by users with these roles:
+
+* Editor
+* CommonEditor
+* Contributor
+* Owner
+* Manager
+
+cache.invalidate
+----------------
+In order to manually invalidate cache (memcached and varnish) per object this
+package provides a browser view called **cache.invalidate**.
+It will call memcache.invalidate and also notify Purge event for varnish::
+
+    http://localhost:2020/Plone/front-page/cache.invalidate
+
+You can also manually invalidate related items and back references::
+
+    http://localhost:2020/Plone/front-page/cache.invalidate/relatedItems
+
+    http://localhost:2020/Plone/front-page/cache.invalidate/backRefs
 
 By default this method can be called by users with these roles:
 
