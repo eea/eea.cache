@@ -6,14 +6,9 @@ from zope.component import queryAdapter, queryMultiAdapter
 from plone.uuid.interfaces import IUUID
 from eea.cache.event import InvalidateCacheEvent
 from Products.Five.browser import BrowserView
+from eea.cache.browser.interfaces import VARNISH
 
 logger = logging.getLogger('eea.cache')
-
-VARNISH = True
-try:
-    from plone.app import caching
-except ImportError:
-    VARNISH = False
 
 class InvalidateMemCache(BrowserView):
     """ View to invalidate memcache
@@ -85,8 +80,8 @@ class InvalidateCache(BrowserView):
             return "Cache invalidated"
 
         try:
-            if caching.purge.isPurged(self.context):
-                event.notify(caching.purge.Purge(self.context))
+            if VARNISH.purge.isPurged(self.context):
+                event.notify(VARNISH.purge.Purge(self.context))
         except Exception, err:
             logger.exception(err)
 

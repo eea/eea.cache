@@ -5,6 +5,7 @@
 
   <browser:page
     name="memcache.invalidate"
+    layer="eea.cache.interfaces.ILayer"
     for="eea.cache.interfaces.ICacheAware"
     class=".app.view.InvalidateMemCache"
     allowed_attributes="relatedItems backRefs"
@@ -12,9 +13,17 @@
 
   <browser:page
     name="cache.invalidate"
+    layer="eea.cache.interfaces.ILayer"
     for="eea.cache.interfaces.ICacheAware"
     class=".app.view.InvalidateCache"
     allowed_attributes="relatedItems backRefs"
+    permission="eea.cache.invalidate" />
+
+  <browser:page
+    name="cache.settings"
+    layer="eea.cache.interfaces.ILayer"
+    for="eea.cache.interfaces.ICacheAware"
+    class=".app.edit.Settings"
     permission="eea.cache.invalidate" />
 
 </configure>

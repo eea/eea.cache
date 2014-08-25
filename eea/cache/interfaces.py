@@ -3,6 +3,7 @@
 from zope import interface
 from zope import schema
 from eea.cache.subtypes.interfaces import ICacheAware
+from eea.cache.browser.interfaces import ILayer
 
 class IMemcachedClient(interface.Interface):
     """A memcache client utility
@@ -119,6 +120,7 @@ class IInvalidateCacheEvent(interface.Interface):
 
 __all__ = [
     ICacheAware.__name__,
+    ILayer.__name__,
     IInvalidateCacheEvent.__name__,
     IMemcachedClient.__name__,
 ]
