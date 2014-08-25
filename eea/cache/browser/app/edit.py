@@ -11,7 +11,7 @@ from eea.cache.config import EEAMessageFactory as _
 class Settings(EditForm):
     """ Cache settings
     """
-    label = _(u"Invalidate context's cache (memcached)")
+    label = _(u"Invalidate context related cache (memcached)")
     form_fields = Fields(ISettings)
 
     def setUpWidgets(self, ignore_request=False):

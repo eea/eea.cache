@@ -34,7 +34,7 @@ class ISettings(Interface):
     if VARNISH:
         varnish = schema.Bool(
             title=_(u"Varnish"),
-            description=_(u"Include Varnish or Squid cache."),
+            description=_(u"Also invalidate Varnish cache."),
             required=False,
             default=False
         )
