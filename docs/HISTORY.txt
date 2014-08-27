@@ -1,8 +1,8 @@
 Changelog
 =========
 
-7.0-dev - (unreleased)
-----------------------
+7.0 - (2014-08-27)
+------------------
 * Upgrade step: Within "Plone > Site setup > Add-ons" install EEA Cache
   [voineali refs #20678]
 * Pre-upgrade-step: Also add eea.cache within buildout zcml directive before
@@ -19,7 +19,6 @@ Changelog
 * Change: Auto-invalidate all cache associated with current object's UID when
   ObjectModifiedEvent is triggered
   [voineali refs #20678]
-
 
 6.3 - (2014-01-21)
 ------------------
