@@ -165,11 +165,32 @@ By default this method can be called by users with these roles:
 * Owner
 * Manager
 
+varnish.invalidate
+-------------------
+In order to manually invalidate memcached cache per object this package
+provides a browser view called **varnish.invalidate**.
+It will invalidate all memcached methods associated with current object's UID::
+
+    http://localhost:2020/Plone/front-page/varnish.invalidate
+
+You can also manually invalidate related items and back references::
+
+    http://localhost:2020/Plone/front-page/varnish.invalidate/relatedItems
+
+    http://localhost:2020/Plone/front-page/varnish.invalidate/backRefs
+
+By default this method can be called by users with these roles:
+
+* Editor
+* CommonEditor
+* Owner
+* Manager
+
 cache.invalidate
 ----------------
 In order to manually invalidate cache (memcached and varnish) per object this
 package provides a browser view called **cache.invalidate**.
-It will call memcache.invalidate and also notify Purge event for varnish::
+It will call memcache.invalidate and varnish.invalidate::
 
     http://localhost:2020/Plone/front-page/cache.invalidate
 

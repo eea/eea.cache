@@ -11,7 +11,7 @@ from eea.cache.config import EEAMessageFactory as _
 class Settings(EditForm):
     """ Cache settings
     """
-    label = _(u"Invalidate context related cache (memcached)")
+    label = _(u"Invalidate context related cache")
     form_fields = Fields(ISettings)
 
     def setUpWidgets(self, ignore_request=False):
@@ -28,15 +28,19 @@ class Settings(EditForm):
     def invalidate(self, saction, data):
         """ Invalidate cache
         """
-        varnish = data.get('varnish', False)
-        if varnish:
+        if data.get('varnish', False):
             invalidate = queryMultiAdapter((self.context, self.request),
-                                           name='cache.invalidate')
-        else:
+                                           name='varnish.invalidate')
+            if not invalidate:
+                self.message = u"Adapter missing, can't invalidate Varnish."
+
+        if data.get('memcache', False):
             invalidate = queryMultiAdapter((self.context, self.request),
                                            name='memcache.invalidate')
+            if not invalidate:
+                self.message = u"Adapter missing, can't invalidate Memcache."
+
         if not invalidate:
-            self.message = u"Can't invalidate cache. Missing adapters"
             return self.nextUrl
 
         self.message = invalidate()
@@ -50,7 +54,7 @@ class Settings(EditForm):
 
     @property
     def nextUrl(self):
-        """ Redirect to daviz-edit.html as next_url
+        """ Redirect to the default view
         """
         status = queryAdapter(self.request, IStatusMessage)
         if status:

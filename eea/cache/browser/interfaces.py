@@ -21,15 +21,21 @@ try:
 except ImportError:
     VARNISH = None
 
+
 class ILayer(Interface):
     """ Custom browser layer for this package
     """
 
 
-
 class ISettings(Interface):
     """ Cache settings
     """
+    memcache = schema.Bool(
+        title=_(u"Memcache"),
+        description=_(u"Also invalidate Memcache cache."),
+        required=False,
+        default=True
+    )
 
     if VARNISH:
         varnish = schema.Bool(

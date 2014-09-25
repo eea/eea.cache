@@ -12,6 +12,14 @@
     permission="eea.cache.invalidate" />
 
   <browser:page
+    name="varnish.invalidate"
+    layer="eea.cache.interfaces.ILayer"
+    for="eea.cache.interfaces.ICacheAware"
+    class=".app.view.InvalidateVarnish"
+    allowed_attributes="relatedItems backRefs"
+    permission="eea.cache.invalidate" />
+
+  <browser:page
     name="cache.invalidate"
     layer="eea.cache.interfaces.ILayer"
     for="eea.cache.interfaces.ICacheAware"
