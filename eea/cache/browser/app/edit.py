@@ -8,6 +8,7 @@ from eea.cache.browser.interfaces import IStatusMessage
 from eea.cache.browser.interfaces import ISettings
 from eea.cache.config import EEAMessageFactory as _
 
+
 class Settings(EditForm):
     """ Cache settings
     """
@@ -24,31 +25,38 @@ class Settings(EditForm):
             form=self, data=self._data, adapters=self.adapters,
             ignore_request=ignore_request)
 
+    def invalidateRelated(self, invalidate_adaptor, data):
+        """ Invalidate related items and back references
+        """
+        if data.get('relatedItems', False):
+            invalidate_adaptor.relatedItems()
+
+        if data.get('backRefs', False):
+            invalidate_adaptor.backRefs()
+
     @action(_(u'Invalidate'))
     def invalidate(self, saction, data):
         """ Invalidate cache
         """
+        self.message = ''
+
         if data.get('varnish', False):
             invalidate = queryMultiAdapter((self.context, self.request),
                                            name='varnish.invalidate')
-            if not invalidate:
-                self.message = u"Adapter missing, can't invalidate Varnish."
+            if invalidate:
+                self.message += invalidate()
+                self.invalidateRelated(invalidate, data)
+            else:
+                self.message += u" Adapter missing, can't invalidate Varnish."
 
         if data.get('memcache', False):
             invalidate = queryMultiAdapter((self.context, self.request),
                                            name='memcache.invalidate')
-            if not invalidate:
-                self.message = u"Adapter missing, can't invalidate Memcache."
-
-        if not invalidate:
-            return self.nextUrl
-
-        self.message = invalidate()
-        if data.get('relatedItems', False):
-            invalidate.relatedItems()
-
-        if data.get('backRefs', False):
-            invalidate.backRefs()
+            if invalidate:
+                self.message += invalidate()
+                self.invalidateRelated(invalidate, data)
+            else:
+                self.message += u" Adapter missing, can't invalidate Memcache."
 
         return self.nextUrl
 
