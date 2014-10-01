@@ -1,8 +1,8 @@
 Changelog
 =========
 
-7.1-dev - (unreleased)
-----------------------
+7.1 - (2014-10-01)
+------------------
 * Feature: invalidate Memcache now appear on cache form as one of the options.
   [ghicaale refs #21143]
 * Feature: created handler to invalidate only Varnish.
