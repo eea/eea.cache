@@ -7,6 +7,7 @@ from plone.uuid.interfaces import IUUID
 from eea.cache.event import InvalidateCacheEvent
 from Products.Five.browser import BrowserView
 from eea.cache.browser.interfaces import VARNISH
+from eea.cache.config import EEAMessageFactory as _
 
 logger = logging.getLogger('eea.cache')
 
@@ -23,7 +24,7 @@ class InvalidateMemCache(BrowserView):
             if not uid:
                 continue
             event.notify(InvalidateCacheEvent(raw=True, dependencies=[uid]))
-        return 'Memcache invalidated for relatedItems.'
+        return _(u"Memcache invalidated for relatedItems.")
 
     def backRefs(self, **kwargs):
         """ Invalidate back references
@@ -34,14 +35,14 @@ class InvalidateMemCache(BrowserView):
             if not uid:
                 continue
             event.notify(InvalidateCacheEvent(raw=True, dependencies=[uid]))
-        return 'Memcache invalidated for back references.'
+        return _(u"Memcache invalidated for back references.")
 
     def __call__(self, **kwargs):
         uid = queryAdapter(self.context, IUUID)
         if not uid:
-            return "Can't invalidate memcache. Missing uid adapter."
+            return _(u"Can't invalidate memcache. Missing uid adapter.")
         event.notify(InvalidateCacheEvent(raw=True, dependencies=[uid]))
-        return " Memcache invalidated."
+        return _(u"Memcache invalidated.")
 
 
 class InvalidateVarnish(BrowserView):
@@ -57,7 +58,7 @@ class InvalidateVarnish(BrowserView):
                 (item, self.request), name='varnish.invalidate',
                 default=lambda:None)
             invalidate_cache()
-        return 'Varnish invalidated for relatedItems.'
+        return _(u"Varnish invalidated for relatedItems.")
 
     def backRefs(self, **kwargs):
         """ Invalidate back references
@@ -68,11 +69,11 @@ class InvalidateVarnish(BrowserView):
                 (item, self.request), name='varnish.invalidate',
                 default=lambda:None)
             invalidate_cache()
-        return 'Varnish invalidated for back references.'
+        return _(u"Varnish invalidated for back references.")
 
     def __call__(self, **kwargs):
         if not VARNISH:
-            return " Varnish invalidated."
+            return _(u"Varnish invalidated.")
 
         try:
             if VARNISH.purge.isPurged(self.context):
@@ -80,7 +81,7 @@ class InvalidateVarnish(BrowserView):
         except Exception, err:
             logger.exception(err)
 
-        return " Varnish invalidated."
+        return _(u"Varnish invalidated.")
 
 
 class InvalidateCache(BrowserView):
@@ -96,7 +97,7 @@ class InvalidateCache(BrowserView):
                 (item, self.request), name='cache.invalidate',
                 default=lambda:None)
             invalidate_cache()
-        return 'Cache invalidated for relatedItems.'
+        return _(u"Cache invalidated for relatedItems.")
 
     def backRefs(self, **kwargs):
         """ Invalidate back references
@@ -107,7 +108,7 @@ class InvalidateCache(BrowserView):
                 (item, self.request), name='cache.invalidate',
                 default=lambda:None)
             invalidate_cache()
-        return 'Cache invalidated for back references.'
+        return _(u"Cache invalidated for back references.")
 
     def __call__(self, **kwargs):
         # Memcache
@@ -120,4 +121,4 @@ class InvalidateCache(BrowserView):
                                                 name='varnish.invalidate')
         invalidate_varnish()
 
-        return 'Varnish and Memcache invalidated.'
+        return _(u"Varnish and Memcache invalidated.")

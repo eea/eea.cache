@@ -5,8 +5,6 @@
 
 """
 from zope.interface import Interface
-from zope import schema
-from eea.cache.config import EEAMessageFactory as _
 try:
     from Products.statusmessages import interfaces
     IStatusMessage = interfaces.IStatusMessage
@@ -25,36 +23,3 @@ except ImportError:
 class ILayer(Interface):
     """ Custom browser layer for this package
     """
-
-
-class ISettings(Interface):
-    """ Cache settings
-    """
-    memcache = schema.Bool(
-        title=_(u"Memcache"),
-        description=_(u"Also invalidate Memcache cache."),
-        required=False,
-        default=True
-    )
-
-    if VARNISH:
-        varnish = schema.Bool(
-            title=_(u"Varnish"),
-            description=_(u"Also invalidate Varnish cache."),
-            required=False,
-            default=False
-        )
-
-    relatedItems = schema.Bool(
-        title=_(u"Related items"),
-        description=_(u"Also invalidate cache for context's related items."),
-        required=False,
-        default=False
-    )
-
-    backRefs = schema.Bool(
-        title=_(u"Back references"),
-        description=_(u"Also invalidate cache for context's back references."),
-        required=False,
-        default=False
-    )
