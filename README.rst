@@ -207,6 +207,81 @@ By default this method can be called by users with these roles:
 * Owner
 * Manager
 
+cache.settings
+--------------
+There is also a Cache Tab per object where you can manually select which cache
+to invalidate. By default, you can invalidate memcache and varnish. You also
+have the possibility to invalidate memcache and/or varnish for related items
+and also fo back references.
+
+This form can be extended with more options. For a more detailed
+example see `eea.pdf`_
+
+**configure.zcml**::
+
+  <adapter
+    zcml:condition="installed eea.cache"
+    factory=".behavior.ExtraBehavior"
+    />
+
+  <adapter
+    zcml:condition="installed eea.cache"
+    factory=".behavior.ExtraSettings"
+    name="eea.pdf.cache.extender"
+    />
+
+**behavior.py**::
+
+  # Model
+  class IExtraSettings(model.Schema):
+      """ Extra settings
+      """
+      pdf = schema.Bool(
+          title=_(u"PDF"),
+          description=_(u"Invalidate latest generated PDF file"),
+          required=False,
+          default=False
+      )
+
+
+  # Behaviour
+  class ExtraBehavior(object):
+      implements(IExtraSettings)
+      adapts(IPDFAware)
+
+      def __init__(self, context):
+          self.context = context
+
+      @property
+      def pdf(self):
+          """ PDF
+          """
+          return False
+
+      @pdf.setter
+      def pdf(self, value):
+          """ Invalidate last generated PDF?
+          """
+          if not value:
+              return
+
+          removePdfFiles()
+
+  # Form
+  class ExtraSettings(extensible.FormExtender):
+      adapts(IPDFAware, ILayer, SettingsForm)
+
+      def __init__(self, context, request, form):
+          self.context = context
+          self.request = request
+          self.form = form
+
+      def update(self):
+          """ Extend form
+          """
+          self.add(IExtraSettings, prefix="extra")
+          self.move('pdf', after='varnish', prefix='extra')
+
 
 Copyright and license
 =====================
@@ -234,3 +309,4 @@ EEA_ - European Environment Agency (EU)
 .. _`plone.memoize`: http://pypi.python.org/pypi/plone.memoize
 .. _`plone.uuid`: http://pypi.python.org/pypi/plone.uuid
 .. _`python-memcached`: http://pypi.python.org/pypi/python-memcached
+.. _`eea.pdf`: http://eea.github.io/docs/eea.pdf

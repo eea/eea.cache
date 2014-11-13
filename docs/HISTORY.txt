@@ -3,6 +3,9 @@ Changelog
 
 7.2-dev - (unreleased)
 ----------------------
+* Change: Migrate cache invalidation form to plone.z3cform in order to easily
+  extend it outside this package
+  [voineali refs #21630]
 
 7.1 - (2014-10-01)
 ------------------
