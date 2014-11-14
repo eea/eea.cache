@@ -1,14 +1,23 @@
 """ Events
 """
-from zope import interface
+from zope.interface import implementer
 from zope import component
-from eea.cache.interfaces import IInvalidateCacheEvent, IMemcachedClient
+from eea.cache.interfaces import IMemcachedClient
+from eea.cache.interfaces import IInvalidateMemCacheEvent
+from eea.cache.interfaces import IInvalidateEverythingEvent
+from eea.cache.interfaces import VARNISH
 
-class InvalidateCacheEvent(object):
-    """ invalidate cache event
+
+class InvalidateEvent(object):
+    """ Abstract cache invalidation event
     """
-    interface.implements(IInvalidateCacheEvent)
-
+#
+# Memcache
+#
+@implementer(IInvalidateMemCacheEvent)
+class InvalidateMemCacheEvent(InvalidateEvent):
+    """ invalidate memcache event
+    """
     def __init__(self, cacheName=None, key=None,
                  ns=None, raw=False, dependencies=None):
         self.cacheName = cacheName
@@ -17,8 +26,35 @@ class InvalidateCacheEvent(object):
         self.raw = raw
         self.dependencies = dependencies or []
 
-@component.adapter(IInvalidateCacheEvent)
-def invalidateCache(event):
+# BBB
+InvalidateCacheEvent = InvalidateMemCacheEvent
+
+#
+# Varnish
+#
+if VARNISH:
+    from plone.app.caching.purge import Purge
+    InvalidateVarnishEvent = Purge
+else:
+    class InvalidateVarnishEvent(object):
+        """ Fallback invalidation event for varnish
+        """
+        def __init__(self, object, *args, **kwargs):
+            self.object = object
+
+#
+# Varnish and memcache
+#
+@implementer(IInvalidateEverythingEvent)
+class InvalidateEverythingEvent(InvalidateEvent):
+    """ Invalidation event for both varnish and memcache
+    """
+    def __init__(self, object):
+        self.object = object
+
+
+@component.adapter(IInvalidateMemCacheEvent)
+def invalidateMemCache(event):
     """ Invalidate cache
     """
     if event.cacheName is not None:
@@ -35,7 +71,24 @@ def invalidateCache(event):
             cache.invalidate(event.key, event.ns, True, event.dependencies)
             cache.invalidate(event.key, event.ns, False, event.dependencies)
 
-def flush(obj, evt):
+#
+# Util event handlers
+#
+def flushVarnish(obj, evt):
+    """ Purge memcache on ObjectModifiedEvent
+    """
+    request = getattr(obj, 'REQUEST', None)
+    if not request:
+        return
+
+    invalidate = component.queryMultiAdapter((obj, request),
+                     name=u'varnish.invalidate')
+    if not invalidate:
+        return
+
+    return invalidate()
+
+def flushMemcache(obj, evt):
     """ Purge memcache on ObjectModifiedEvent
     """
     request = getattr(obj, 'REQUEST', None)
@@ -44,6 +97,23 @@ def flush(obj, evt):
 
     invalidate = component.queryMultiAdapter((obj, request),
                      name=u'memcache.invalidate')
+    if not invalidate:
+        return
+
+    return invalidate()
+
+# BBB
+flush = flushMemcache
+
+def flushEverything(obj, evt):
+    """ Invalidate varnish and memcache
+    """
+    request = getattr(obj, 'REQUEST', None)
+    if not request:
+        return
+
+    invalidate = component.queryMultiAdapter((obj, request),
+                     name=u'cache.invalidate')
     if not invalidate:
         return
 

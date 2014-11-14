@@ -4,7 +4,8 @@ import logging
 from zope import event
 from zope.component import queryAdapter, queryMultiAdapter
 from plone.uuid.interfaces import IUUID
-from eea.cache.event import InvalidateCacheEvent
+from eea.cache.event import InvalidateMemCacheEvent
+from eea.cache.event import InvalidateVarnishEvent
 from Products.Five.browser import BrowserView
 from eea.cache.browser.interfaces import VARNISH
 from eea.cache.config import EEAMessageFactory as _
@@ -23,7 +24,7 @@ class InvalidateMemCache(BrowserView):
             uid = queryAdapter(item, IUUID)
             if not uid:
                 continue
-            event.notify(InvalidateCacheEvent(raw=True, dependencies=[uid]))
+            event.notify(InvalidateMemCacheEvent(raw=True, dependencies=[uid]))
         return _(u"Memcache invalidated for relatedItems.")
 
     def backRefs(self, **kwargs):
@@ -34,14 +35,14 @@ class InvalidateMemCache(BrowserView):
             uid = queryAdapter(item, IUUID)
             if not uid:
                 continue
-            event.notify(InvalidateCacheEvent(raw=True, dependencies=[uid]))
+            event.notify(InvalidateMemCacheEvent(raw=True, dependencies=[uid]))
         return _(u"Memcache invalidated for back references.")
 
     def __call__(self, **kwargs):
         uid = queryAdapter(self.context, IUUID)
         if not uid:
             return _(u"Can't invalidate memcache. Missing uid adapter.")
-        event.notify(InvalidateCacheEvent(raw=True, dependencies=[uid]))
+        event.notify(InvalidateMemCacheEvent(raw=True, dependencies=[uid]))
         return _(u"Memcache invalidated.")
 
 
@@ -77,7 +78,7 @@ class InvalidateVarnish(BrowserView):
 
         try:
             if VARNISH.purge.isPurged(self.context):
-                event.notify(VARNISH.purge.Purge(self.context))
+                event.notify(InvalidateVarnishEvent(self.context))
         except Exception, err:
             logger.exception(err)
 

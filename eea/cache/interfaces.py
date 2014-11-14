@@ -4,6 +4,7 @@ from zope import interface
 from zope import schema
 from eea.cache.subtypes.interfaces import ICacheAware
 from eea.cache.browser.interfaces import ILayer
+from eea.cache.browser.interfaces import VARNISH
 
 class IMemcachedClient(interface.Interface):
     """A memcache client utility
@@ -84,9 +85,15 @@ class IMemcachedClient(interface.Interface):
         namespace
         """
 
+class IInvalidateEvent(interface.Interface):
+    """ Abstract cache invalidation interface
+    """
 
-class IInvalidateCacheEvent(interface.Interface):
-    """An event which invalidates cache entries."""
+#
+# Memcache
+#
+class IInvalidateMemCacheEvent(IInvalidateEvent):
+    """An event which invalidates memcache entries."""
 
     cacheName = schema.TextLine(
         title = u'cacheName',
@@ -118,9 +125,31 @@ class IInvalidateCacheEvent(interface.Interface):
         required = False,
     )
 
+# BBB
+IInvalidateCacheEvent = IInvalidateMemCacheEvent
+
+#
+# Varnish
+#
+class IInvalidateVarnishEvent(IInvalidateEvent):
+    """ An event which invalidates varnish entries
+    """
+
+#
+# All caching invalidation event
+#
+class IInvalidateEverythingEvent(IInvalidateEvent):
+    """ Invalidate both varnish and memcache entries
+    """
+
+
 __all__ = [
     ICacheAware.__name__,
     ILayer.__name__,
-    IInvalidateCacheEvent.__name__,
     IMemcachedClient.__name__,
+    IInvalidateEvent.__name__,
+    IInvalidateMemCacheEvent.__name__,
+    IInvalidateVarnishEvent.__name__,
+    IInvalidateEverythingEvent.__name__,
+    VARNISH.__name__,
 ]

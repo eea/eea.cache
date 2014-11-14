@@ -3,6 +3,9 @@ Changelog
 
 7.2-dev - (unreleased)
 ----------------------
+* Change: Added InvalidateEverything event to be able to invalidate memcache and
+  varnish instead of adding subscribers on ObjectModifiedEvent
+  [voineali refs #21852, #21850, #21851]
 * Change: Migrate cache invalidation form to plone.z3cform in order to easily
   extend it outside this package
   [voineali refs #21630]

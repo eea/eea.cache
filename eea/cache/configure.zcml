@@ -11,11 +11,27 @@
   <include package=".browser" />
   <include package=".subtypes" />
 
-  <subscriber handler=".event.invalidateCache" />
+  <!-- Varnish invalidation event -->
+  <class class="eea.cache.event.InvalidateVarnishEvent">
+    <implements interface="eea.cache.interfaces.IInvalidateVarnishEvent" />
+  </class>
 
+  <!-- Invalidate memcache on IInvalidateMemCache -->
+  <subscriber handler=".event.invalidateMemCache" />
+
+  <!-- Invalidate varnish on IInvalidateVarnish event -->
+  <!-- This is already handled by plone.app.caching -->
+
+  <!-- Invalidate varnish and memcache on IInvalidateEverything event -->
+  <subscriber
+    for="eea.cache.interfaces.ICacheAware
+         eea.cache.interfaces.IInvalidateEverythingEvent"
+    handler=".event.flushEverything" />
+
+  <!-- Invalidate memcache on object modified -->
   <subscriber
     for="eea.cache.interfaces.ICacheAware
          zope.lifecycleevent.interfaces.IObjectModifiedEvent"
-    handler=".event.flush" />
+    handler=".event.flushMemcache" />
 
 </configure>

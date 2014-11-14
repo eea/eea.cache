@@ -87,9 +87,9 @@ Cache decorator
 
 Lets clear any running memcache::
 
-    >>> from eea.cache.event import InvalidateCacheEvent
+    >>> from eea.cache.event import InvalidateMemCacheEvent
     >>> from zope.event import notify
-    >>> notify(InvalidateCacheEvent(raw=True, dependencies=['frontpage']))
+    >>> notify(InvalidateMemCacheEvent(raw=True, dependencies=['frontpage']))
 
 Our myMethod will now be cached with the key returned from the method 'key' and
 with dependency 'frontpage'::
@@ -99,7 +99,7 @@ with dependency 'frontpage'::
     >>> myMethod(3)
     4
 
-    >>> notify(InvalidateCacheEvent(raw=True, dependencies=['frontpage']))
+    >>> notify(InvalidateMemCacheEvent(raw=True, dependencies=['frontpage']))
     >>> myMethod(3)
     9
 
