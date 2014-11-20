@@ -1,6 +1,9 @@
 Changelog
 =========
 
+7.3-dev - (unreleased)
+----------------------
+
 7.2 - (2014-11-20)
 ------------------
 * Change: Added InvalidateEverything event to be able to invalidate memcache and
