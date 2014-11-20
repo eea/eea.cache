@@ -1,8 +1,8 @@
 Changelog
 =========
 
-7.2-dev - (unreleased)
-----------------------
+7.2 - (2014-11-20)
+------------------
 * Change: Added InvalidateEverything event to be able to invalidate memcache and
   varnish instead of adding subscribers on ObjectModifiedEvent
   [voineali refs #21852, #21850, #21851]
