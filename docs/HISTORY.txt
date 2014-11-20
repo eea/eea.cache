@@ -3,6 +3,8 @@ Changelog
 
 7.3-dev - (unreleased)
 ----------------------
+* Bug fix: fixed libevent download made by the buildout
+  [ghicaale refs #21453]
 
 7.2 - (2014-11-20)
 ------------------
