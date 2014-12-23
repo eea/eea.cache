@@ -1,6 +1,9 @@
 Changelog
 =========
 
+7.4-dev - (unreleased)
+----------------------
+
 7.3 - (2014-12-23)
 ------------------
 * Bug fix: fixed libevent download made by the buildout
