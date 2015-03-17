@@ -1,6 +1,9 @@
 Changelog
 =========
 
+7.5.dev0 - (unreleased)
+-----------------------
+
 7.4 - (2015-03-17)
 ------------------
 * Change: Switched to curl in the jenkins build install script
