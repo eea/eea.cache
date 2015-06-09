@@ -57,7 +57,7 @@ class InvalidateVarnish(BrowserView):
         for item in getRelatedItems():
             invalidate_cache = queryMultiAdapter(
                 (item, self.request), name='varnish.invalidate',
-                default=lambda:None)
+                default=lambda: None)
             invalidate_cache()
         return _(u"Varnish invalidated for relatedItems.")
 
@@ -68,7 +68,7 @@ class InvalidateVarnish(BrowserView):
         for item in getBRefs():
             invalidate_cache = queryMultiAdapter(
                 (item, self.request), name='varnish.invalidate',
-                default=lambda:None)
+                default=lambda: None)
             invalidate_cache()
         return _(u"Varnish invalidated for back references.")
 
@@ -96,7 +96,7 @@ class InvalidateCache(BrowserView):
         for item in getRelatedItems():
             invalidate_cache = queryMultiAdapter(
                 (item, self.request), name='cache.invalidate',
-                default=lambda:None)
+                default=lambda: None)
             invalidate_cache()
         return _(u"Cache invalidated for relatedItems.")
 
@@ -107,7 +107,7 @@ class InvalidateCache(BrowserView):
         for item in getBRefs():
             invalidate_cache = queryMultiAdapter(
                 (item, self.request), name='cache.invalidate',
-                default=lambda:None)
+                default=lambda: None)
             invalidate_cache()
         return _(u"Cache invalidated for back references.")
 

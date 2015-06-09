@@ -25,9 +25,11 @@ def eeaSetUp(test):
 def test_suite():
     """ Test suite
     """
-    level1Suites = ( doctest.DocFileSuite('README.txt',
-                                          package='eea.cache',
-                                          optionflags=OPTIONFLAGS,
-                                          setUp=eeaSetUp,
-                                          tearDown=tearDown), )
+    level1Suites = (
+        doctest.DocFileSuite('README.txt',
+                             package='eea.cache',
+                             optionflags=OPTIONFLAGS,
+                             setUp=eeaSetUp,
+                             tearDown=tearDown),
+    )
     return unittest.TestSuite(level1Suites)

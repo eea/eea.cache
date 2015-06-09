@@ -31,5 +31,7 @@ class FakeMemcachedClient(MemcachedClient):
         """
         if not dependencies:
             dependencies = []
-        self._cache[key] = { 'data': data,
-                             'dependencies': dependencies }
+        self._cache[key] = {
+            'data': data,
+            'dependencies': dependencies
+        }

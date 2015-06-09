@@ -17,25 +17,25 @@ class IMemcachedClient(interface.Interface):
         default=None)
 
     servers = schema.List(
-        title = u'Servers',
-        description = u"Servers defined as <hostname>:<port>",
-        value_type = schema.BytesLine(),
-        required = True,
+        title=u'Servers',
+        description=u"Servers defined as <hostname>:<port>",
+        value_type=schema.BytesLine(),
+        required=True,
         default=['127.0.0.1:11211']
         )
 
     defaultLifetime = schema.Int(
-        title = u'Default Lifetime',
-        description = u'The default lifetime of entries',
-        required = True,
-        default = 3600,
+        title=u'Default Lifetime',
+        description=u'The default lifetime of entries',
+        required=True,
+        default=3600,
         )
 
     trackKeys = schema.Bool(
-        title = u'Track Keys',
-        description = u'Enable the keys method',
-        required = False,
-        default = False,
+        title=u'Track Keys',
+        description=u'Enable the keys method',
+        required=False,
+        default=False,
         )
 
     def getStatistics():
@@ -96,33 +96,33 @@ class IInvalidateMemCacheEvent(IInvalidateEvent):
     """An event which invalidates memcache entries."""
 
     cacheName = schema.TextLine(
-        title = u'cacheName',
-        description = u"""
+        title=u'cacheName',
+        description=u"""
             Invalidate in the cache with this name.
             If no name is given all caches are invalidated.
             """,
-        required = False,
+        required=False,
     )
 
     key = schema.TextLine(
-        title = u'key',
-        required = False,
+        title=u'key',
+        required=False,
     )
 
     ns = schema.TextLine(
-        title = u'namespace',
-        required = False,
+        title=u'namespace',
+        required=False,
     )
 
     raw = schema.Bool(
-        title = u'raw',
-        required = False,
-        default = False,
+        title=u'raw',
+        required=False,
+        default=False,
     )
 
     dependencies = schema.List(
-        title = u'Dependencies',
-        required = False,
+        title=u'Dependencies',
+        required=False,
     )
 
 # BBB
