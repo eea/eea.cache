@@ -100,8 +100,9 @@ class SettingsBehavior(object):
         if not self._request:
             self._request = value.get('request', None)
 
-        if self.invalidate_memcache:
-            self.invalidate_memcache()
+        invalidate_memcache = self.invalidate_memcache
+        if invalidate_memcache:
+            invalidate_memcache()
 
     @property
     def varnish(self):
@@ -119,8 +120,9 @@ class SettingsBehavior(object):
         if not self._request:
             self._request = value.get('request', None)
 
-        if self.invalidate_varnish:
-            self.invalidate_varnish()
+        invalidate_varnish = self.invalidate_varnish
+        if invalidate_varnish:
+            invalidate_varnish()
 
     @property
     def relatedItems(self):
