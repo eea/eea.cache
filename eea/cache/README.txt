@@ -3,7 +3,8 @@ EEA Cache
 =========
 This package combines the features from lovely.memcached and plone.memoize.ram.
 It provides a decorator and utility for Memcaches at EEA.
-The decorator allows you set dependencies known by lovely.memcached
+The decorator allows you set dependencies known by lovely.memcached.
+It supports python-memcached and also libmemcached, through the pylibmc wrapper.
 
 .. contents::
 
