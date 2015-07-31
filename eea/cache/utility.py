@@ -3,7 +3,6 @@
 import md5
 import time
 import logging
-import memcache
 import cPickle
 import threading
 import persistent
@@ -12,6 +11,13 @@ import socket
 from zope.schema.fieldproperty import FieldProperty
 from zope import interface
 from eea.cache.interfaces import IMemcachedClient
+try:
+    import pylibmc
+except Exception:
+    import memcache
+    _MEMCACHED_CLIENT = "memcache"
+else:
+    _MEMCACHED_CLIENT = "pylibmc"
 
 TLOCAL = threading.local()
 
@@ -82,10 +88,15 @@ class MemcachedClient(persistent.Persistent):
         log.debug('set: %r, %r, %r, %r', key, len(data), ns, lifetime)
 
         bKey = self._buildKey(key, ns, raw=raw)
-        if self.client.set(bKey, data, lifetime):
+        try:
+            ret = self.client.set(bKey, data, lifetime)
+        except Exception:
+            ret = None
+        if ret:
             self._keysSet(key, ns, lifetime)
             self._depSet(bKey, ns, dependencies)
             return bKey
+
         return None
 
     def _depSet(self, key, ns, deps):
@@ -104,7 +115,11 @@ class MemcachedClient(persistent.Persistent):
         """ Query
         """
         ns = self._getNS(ns, raw)
-        res = self.client.get(self._buildKey(key, ns, raw=raw))
+        try:
+            res = self.client.get(self._buildKey(key, ns, raw=raw))
+        except Exception:
+            res = None
+
         if res is None:
             return default
         if raw:
@@ -128,7 +143,10 @@ class MemcachedClient(persistent.Persistent):
             self.client.delete(self._buildKey(key, ns, raw))
         for dep in dependencies:
             depKey = self._buildDepKey(dep, ns)
-            keys = self.client.get(depKey)
+            try:
+                keys = self.client.get(depKey)
+            except Exception:
+                keys = None
             if keys is not None:
                 self.client.delete(depKey)
                 for key in keys:
@@ -242,6 +260,8 @@ class MemcachedClient(persistent.Persistent):
     def _instantiateClient(self, debug):
         """ Init client
         """
+        if _MEMCACHED_CLIENT is "pylibmc":
+            return pylibmc.Client(self.servers)
         return memcache.Client(self.servers, debug=debug)
 
     def _keysInit(self, storage, uid, clients=None):

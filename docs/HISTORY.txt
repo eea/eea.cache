@@ -1,8 +1,10 @@
 Changelog
 =========
 
-7.5.dev0 - (unreleased)
+8.0.dev0 - (unreleased)
 -----------------------
+* Feature: Implemented support for pylibmc
+  [razvanchitu refs #27571]
 
 7.4 - (2015-03-17)
 ------------------

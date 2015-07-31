@@ -60,6 +60,7 @@ Dependencies
 ============
 
 * `python-memcached`_
+* `pylibmc`_ (optional, for better performance)
 * `plone.memoize`_
 * `plone.uuid`_
 
@@ -307,6 +308,7 @@ EEA_ - European Environment Agency (EU)
 .. _`plone.recipe.zope2instance`: http://pypi.python.org/pypi/plone.recipe.zope2instance
 .. _`eea.app.visualization`: http://eea.github.com/docs/eea.app.visualization
 .. _`plone.memoize`: http://pypi.python.org/pypi/plone.memoize
+.. _`pylibmc`: http://pypi.python.org/pypi/pylibmc
 .. _`plone.uuid`: http://pypi.python.org/pypi/plone.uuid
 .. _`python-memcached`: http://pypi.python.org/pypi/python-memcached
 .. _`eea.pdf`: http://eea.github.io/docs/eea.pdf
