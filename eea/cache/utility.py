@@ -17,6 +17,7 @@ except Exception:
     import memcache
     _MEMCACHED_CLIENT = "memcache"
 else:
+    from pylibmc import ServerDown
     _MEMCACHED_CLIENT = "pylibmc"
 
 TLOCAL = threading.local()
@@ -60,7 +61,13 @@ class MemcachedClient(persistent.Persistent):
     def getStatistics(self):
         """ Statistics
         """
-        return self.client.get_stats()
+        try:
+            ret = self.client.get_stats()
+        except ServerDown:
+            log.info('The memcached server(s) %s is(are) down',
+                     ','.join(self.servers))
+            ret = None
+        return ret
 
 
     def _getNS(self, ns, raw):
@@ -138,9 +145,18 @@ class MemcachedClient(persistent.Persistent):
         ns = self._getNS(ns, raw)
         log.debug('invalidate: %r, %r ', key, ns)
         if self.trackKeys:
-            self.client.delete(self._buildKey((ns, key), STAMP_NS))
+            try:
+                self.client.delete(self._buildKey((ns, key), STAMP_NS))
+            except ServerDown:
+                log.info('The memcached server(s) %s is(are) down',
+                         ','.join(self.servers))
         if key is not None:
-            self.client.delete(self._buildKey(key, ns, raw))
+            try:
+                self.client.delete(self._buildKey(key, ns, raw))
+            except ServerDown:
+                log.info('The memcached server(s) %s is(are) down',
+                         ','.join(self.servers))
+
         for dep in dependencies:
             depKey = self._buildDepKey(dep, ns)
             try:
@@ -156,7 +172,12 @@ class MemcachedClient(persistent.Persistent):
         """ Invalidate all
         """
         # notice this does not look at namespaces
-        self.client.flush_all()
+        try:
+            self.client.flush_all()
+        except ServerDown:
+            log.info('The memcached server(s) %s is(are) down',
+                     ','.join(self.servers))
+
         key = (tuple(self.servers), self.trackKeys)
         del self._storages()[key]
 
