@@ -1,7 +1,7 @@
 """ EEA Cache Installer
 """
-from setuptools import setup, find_packages
 import os
+from setuptools import setup, find_packages
 
 NAME = 'eea.cache'
 PATH = NAME.split('.') + ['version.txt']
