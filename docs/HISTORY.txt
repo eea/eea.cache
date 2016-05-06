@@ -3,6 +3,8 @@ Changelog
 
 7.6.dev0 - (unreleased)
 -----------------------
+* Bug fix: Fix pylint warnings
+  [chiridra refs #71940]
 
 7.5 - (2015-08-18)
 ------------------
