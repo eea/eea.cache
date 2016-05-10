@@ -5,7 +5,18 @@ from zope import component
 from eea.cache.interfaces import IMemcachedClient
 from eea.cache.interfaces import IInvalidateMemCacheEvent
 from eea.cache.interfaces import IInvalidateEverythingEvent
-from eea.cache.interfaces import VARNISH
+#
+# Varnish
+#
+try:
+    from plone.app.caching.purge import Purge
+    InvalidateVarnishEvent = Purge
+except ImportError:
+    class InvalidateVarnishEvent(object):
+        """ Fallback invalidation event for varnish
+        """
+        def __init__(self, obj, *args, **kwargs):
+            self.object = obj
 
 
 class InvalidateEvent(object):
@@ -29,18 +40,6 @@ class InvalidateMemCacheEvent(InvalidateEvent):
 # BBB
 InvalidateCacheEvent = InvalidateMemCacheEvent
 
-#
-# Varnish
-#
-if VARNISH:
-    from plone.app.caching.purge import Purge
-    InvalidateVarnishEvent = Purge
-else:
-    class InvalidateVarnishEvent(object):
-        """ Fallback invalidation event for varnish
-        """
-        def __init__(self, object, *args, **kwargs):
-            self.object = object
 
 #
 # Varnish and memcache
@@ -49,8 +48,8 @@ else:
 class InvalidateEverythingEvent(InvalidateEvent):
     """ Invalidation event for both varnish and memcache
     """
-    def __init__(self, object):
-        self.object = object
+    def __init__(self, obj):
+        self.object = obj
 
 
 @component.adapter(IInvalidateMemCacheEvent)

@@ -112,7 +112,6 @@ def cache(get_key, dependencies=None, lifetime=None, auto_invalidate=True):
     :return: decorated function
 
     """
-
     def decorator(fun):
         """ Decorator
         """
