@@ -1,9 +1,9 @@
 """ Browser
 """
 from zope import schema
-from z3c.form import form, button, interfaces, util
 from zope.interface import implements
 from zope.component import adapts, queryMultiAdapter
+from z3c.form import form, button, interfaces, util
 from plone.supermodel import model
 from plone.autoform.form import AutoExtensibleForm
 from eea.cache.interfaces import ICacheAware

@@ -6,9 +6,9 @@ from zope.component import queryAdapter, queryMultiAdapter
 from plone.uuid.interfaces import IUUID
 from eea.cache.event import InvalidateMemCacheEvent
 from eea.cache.event import InvalidateVarnishEvent
-from Products.Five.browser import BrowserView
 from eea.cache.browser.interfaces import VARNISH
 from eea.cache.config import EEAMessageFactory as _
+from Products.Five.browser import BrowserView
 
 logger = logging.getLogger('eea.cache')
 

@@ -5,9 +5,9 @@ import time
 import logging
 import cPickle
 import threading
-import persistent
 import os
 import socket
+import persistent
 from zope.schema.fieldproperty import FieldProperty
 from zope import interface
 from eea.cache.interfaces import IMemcachedClient
