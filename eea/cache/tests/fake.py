@@ -4,6 +4,7 @@ from zope.interface import implements
 from eea.cache.utility import MemcachedClient
 from eea.cache.interfaces import IMemcachedClient
 
+
 class FakeMemcachedClient(MemcachedClient):
     """ Fake Memcached Client
     """
@@ -13,9 +14,9 @@ class FakeMemcachedClient(MemcachedClient):
     def invalidate(self, key=None, ns=None, raw=False, dependencies=None):
         """ Invalidate
         """
-        for key, value in self._cache.items():
+        for d_key, value in self._cache.items():
             if dependencies == value.get('dependencies'):
-                del self._cache[key]
+                del self._cache[d_key]
                 return
 
     def query(self, key, default=None, ns=None, raw=False):

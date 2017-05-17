@@ -13,12 +13,11 @@ from zope import interface
 from eea.cache.interfaces import IMemcachedClient
 try:
     import pylibmc
+    from pylibmc import ServerDown
+    _MEMCACHED_CLIENT = "pylibmc"
 except Exception:
     import memcache
     _MEMCACHED_CLIENT = "memcache"
-else:
-    from pylibmc import ServerDown
-    _MEMCACHED_CLIENT = "pylibmc"
 
 TLOCAL = threading.local()
 
@@ -165,8 +164,8 @@ class MemcachedClient(persistent.Persistent):
                 keys = None
             if keys is not None:
                 self.client.delete(depKey)
-                for key in keys:
-                    self.client.delete(key)
+                for dep_key in keys:
+                    self.client.delete(dep_key)
 
     def invalidateAll(self):
         """ Invalidate all
@@ -281,7 +280,7 @@ class MemcachedClient(persistent.Persistent):
     def _instantiateClient(self, debug):
         """ Init client
         """
-        if _MEMCACHED_CLIENT is "pylibmc":
+        if _MEMCACHED_CLIENT == "pylibmc":
             return pylibmc.Client(self.servers)
         return memcache.Client(self.servers, debug=debug)
 

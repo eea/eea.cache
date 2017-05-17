@@ -3,8 +3,6 @@
 import os
 import cPickle
 import hashlib
-from zope.interface import directlyProvides
-from zope.component import queryUtility, queryAdapter
 from plone.memoize import volatile
 from plone.memoize.interfaces import ICacheChooser
 from plone.memoize.ram import AbstractDict
@@ -21,6 +19,8 @@ except ImportError:
     class IPropertiesTool(Interface):
         """ Fallback
         """
+from zope.interface import directlyProvides
+from zope.component import queryUtility, queryAdapter
 
 class MemcacheAdapter(AbstractDict):
     """ Memcache Adapter
