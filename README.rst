@@ -1,10 +1,8 @@
 =========
 EEA Cache
 =========
-.. image:: http://ci.eionet.europa.eu/job/eea.cache-www/badge/icon
-  :target: http://ci.eionet.europa.eu/job/eea.cache-www/lastBuild
-.. image:: http://ci.eionet.europa.eu/job/eea.cache-plone4/badge/icon
-  :target: http://ci.eionet.europa.eu/job/eea.cache-plone4/lastBuild
+.. image:: http://ci.eionet.europa.eu/job/eea/job/eea.cache/job/master/badge/icon
+  :target: http://ci.eionet.europa.eu/job/eea/job/eea.cache/job/master/display/redirect
 
 Introduction
 ============
