@@ -1,8 +1,12 @@
 =========
 EEA Cache
 =========
-.. image:: http://ci.eionet.europa.eu/job/eea/job/eea.cache/job/master/badge/icon
-  :target: http://ci.eionet.europa.eu/job/eea/job/eea.cache/job/master/display/redirect
+.. image:: https://ci.eionet.europa.eu/buildStatus/icon?job=eea/eea.cache/develop
+  :target: https://ci.eionet.europa.eu/job/eea/job/eea.cache/job/develop/display/redirect
+  :alt: Develop
+.. image:: https://ci.eionet.europa.eu/buildStatus/icon?job=eea/eea.cache/master
+  :target: https://ci.eionet.europa.eu/job/eea/job/eea.cache/job/master/display/redirect
+  :alt: Master
 
 Introduction
 ============
