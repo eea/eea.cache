@@ -123,3 +123,8 @@ class InvalidateCache(BrowserView):
         invalidate_varnish()
 
         return _(u"Varnish and Memcache invalidated.")
+
+
+class InvalidateCachePublic(BrowserView):
+    """ View to invalidate Varnish and Memcache
+    """

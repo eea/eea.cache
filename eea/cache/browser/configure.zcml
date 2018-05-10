@@ -27,6 +27,13 @@
     allowed_attributes="relatedItems backRefs"
     permission="eea.cache.invalidate" />
 
+  <browser:page
+    name="cache.invalidate.public"
+    layer="eea.cache.interfaces.ILayer"
+    for="eea.cache.interfaces.ICacheAware"
+    class=".app.view.InvalidateCachePublic"
+    permission="zope2.View" />
+
   <!-- Invalidate cache z3c.form -->
   <adapter factory=".app.edit.SettingsBehavior" />
   <browser:page

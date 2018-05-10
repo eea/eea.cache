@@ -3,6 +3,9 @@ Changelog
 
 8.2.dev0 - (unreleased)
 -----------------------
+* Feature: replaced invalidate_cache public method with a new method,
+  called cache.invalidate.public, that use eea.cache
+  [alecghica refs #95020]
 
 8.1 - (2017-12-12)
 ------------------
