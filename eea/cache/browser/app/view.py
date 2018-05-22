@@ -9,14 +9,41 @@ from eea.cache.event import InvalidateVarnishEvent
 from eea.cache.browser.interfaces import VARNISH
 from eea.cache.config import EEAMessageFactory as _
 from Products.Five.browser import BrowserView
+from zope.component import getMultiAdapter
+
 
 logger = logging.getLogger('eea.cache')
 
 
-class InvalidateMemCache(BrowserView):
+class BaseInvalidate(BrowserView):
+    """ Base class for the invalidate
+    """
+
+    def __init__(self, context, request):
+        super(BaseInvalidate, self).__init__(context, request)
+        self._parent = None
+        self._is_default_page = None
+
+    @property
+    def parent(self):
+        if self._parent is None:
+            self._parent = self.context.getParentNode()
+        return self._parent
+
+    @property
+    def is_default_page(self):
+        if self._is_default_page is None:
+            state = getMultiAdapter((self.context, self.request),
+                                    name='plone_context_state')
+            self._is_default_page = state.is_default_page()
+        return self._is_default_page
+
+
+class InvalidateMemCache(BaseInvalidate):
     """ View to invalidate memcache
     """
-    def relatedItems(self, **kwargs):
+
+    def related_items(self, context, **kwargs):
         """ Invalidate related Items
         """
         getRelatedItems = getattr(self.context, 'getRelatedItems', lambda: [])
@@ -27,10 +54,21 @@ class InvalidateMemCache(BrowserView):
             event.notify(InvalidateMemCacheEvent(raw=True, dependencies=[uid]))
         return _(u"Memcache invalidated for relatedItems.")
 
-    def backRefs(self, **kwargs):
+    def relatedItems(self, **kwargs):
+        """ Invalidate related Items
+        """
+        msg = self.related_items(self.context)
+
+        # Invalidate cache for a default view parent
+        if self.is_default_page:
+            msg = self.related_items(self.parent)
+
+        return msg
+
+    def back_refs(self, context, **kwargs):
         """ Invalidate back references
         """
-        getBRefs = getattr(self.context, 'getBRefs', lambda: [])
+        getBRefs = getattr(context, 'getBRefs', lambda: [])
         for item in getBRefs():
             uid = queryAdapter(item, IUUID)
             if not uid:
@@ -38,22 +76,42 @@ class InvalidateMemCache(BrowserView):
             event.notify(InvalidateMemCacheEvent(raw=True, dependencies=[uid]))
         return _(u"Memcache invalidated for back references.")
 
-    def __call__(self, **kwargs):
-        uid = queryAdapter(self.context, IUUID)
+    def backRefs(self, **kwargs):
+        """ Invalidate back references
+        """
+        msg = self.back_refs(self.context)
+
+        # Invalidate cache for a default view parent
+        if self.is_default_page:
+            msg = self.back_refs(self.parent)
+
+        return msg
+
+    def invalidate_cache(self, context, **kwargs):
+        uid = queryAdapter(context, IUUID)
         if not uid:
             return _(u"Can't invalidate memcache. Missing uid adapter.")
         event.notify(InvalidateMemCacheEvent(raw=True, dependencies=[uid]))
         return _(u"Memcache invalidated.")
 
+    def __call__(self, **kwargs):
+        msg = self.invalidate_cache(self.context)
 
-class InvalidateVarnish(BrowserView):
+        # Invalidate cache for a default view parent
+        if self.is_default_page and not kwargs.get("parent", None):
+            msg = self.invalidate_cache(self.parent)
+
+        return msg
+
+
+class InvalidateVarnish(BaseInvalidate):
     """ View to invalidate Varnish
     """
 
-    def relatedItems(self, **kwargs):
+    def related_items(self, context, **kwargs):
         """ Invalidate related Items
         """
-        getRelatedItems = getattr(self.context, 'getRelatedItems', lambda: [])
+        getRelatedItems = getattr(context, 'getRelatedItems', lambda: [])
         for item in getRelatedItems():
             invalidate_cache = queryMultiAdapter(
                 (item, self.request), name='varnish.invalidate',
@@ -61,10 +119,21 @@ class InvalidateVarnish(BrowserView):
             invalidate_cache()
         return _(u"Varnish invalidated for relatedItems.")
 
-    def backRefs(self, **kwargs):
+    def relatedItems(self, **kwargs):
+        """ Invalidate related Items
+        """
+        msg = self.related_items(self.context)
+
+        # Invalidate cache for a default view parent
+        if self.is_default_page:
+            msg = self.related_items(self.parent)
+
+        return msg
+
+    def back_refs(self, context, **kwargs):
         """ Invalidate back references
         """
-        getBRefs = getattr(self.context, 'getBRefs', lambda: [])
+        getBRefs = getattr(context, 'getBRefs', lambda: [])
         for item in getBRefs():
             invalidate_cache = queryMultiAdapter(
                 (item, self.request), name='varnish.invalidate',
@@ -72,24 +141,46 @@ class InvalidateVarnish(BrowserView):
             invalidate_cache()
         return _(u"Varnish invalidated for back references.")
 
-    def __call__(self, **kwargs):
+    def backRefs(self, **kwargs):
+        """ Invalidate back references
+        """
+        msg = self.back_refs(self.context)
+
+        # Invalidate cache for a default view parent
+        if self.is_default_page:
+            msg = self.back_refs(self.parent)
+
+        return msg
+
+    def invalidate_cache(self, context, **kwargs):
+        """ Invalidate Varnish
+        """
         if not VARNISH:
             return _(u"Varnish invalidated.")
 
         try:
-            if VARNISH.purge.isPurged(self.context):
-                event.notify(InvalidateVarnishEvent(self.context))
+            if VARNISH.purge.isPurged(context):
+                event.notify(InvalidateVarnishEvent(context))
         except Exception, err:
             logger.exception(err)
 
         return _(u"Varnish invalidated.")
 
+    def __call__(self, **kwargs):
+        msg = self.invalidate_cache(self.context)
 
-class InvalidateCache(BrowserView):
+        # Invalidate cache for a default view parent
+        if self.is_default_page and not kwargs.get("parent", None):
+            msg = self.invalidate_cache(self.parent)
+
+        return msg
+
+
+class InvalidateCache(BaseInvalidate):
     """ View to invalidate Varnish and Memcache
     """
-
-    def relatedItems(self, **kwargs):
+    
+    def related_items(self, context, **kwargs):
         """ Invalidate related Items
         """
         getRelatedItems = getattr(self.context, 'getRelatedItems', lambda: [])
@@ -97,83 +188,62 @@ class InvalidateCache(BrowserView):
             invalidate_cache = queryMultiAdapter(
                 (item, self.request), name='cache.invalidate',
                 default=lambda: None)
-            invalidate_cache()
+            invalidate_cache(parent="ignore")
         return _(u"Cache invalidated for relatedItems.")
 
-    def backRefs(self, **kwargs):
+    def relatedItems(self, **kwargs):
+        """ Invalidate related Items
+        """
+        msg = self.related_items(self.context)
+
+        # Invalidate cache for a default view parent
+        if self.is_default_page:
+            msg = self.related_items(self.parent)
+
+        return msg
+
+    def back_refs(self, context, **kwargs):
         """ Invalidate back references
         """
-        getBRefs = getattr(self.context, 'getBRefs', lambda: [])
+        getBRefs = getattr(context, 'getBRefs', lambda: [])
         for item in getBRefs():
             invalidate_cache = queryMultiAdapter(
                 (item, self.request), name='cache.invalidate',
                 default=lambda: None)
-            invalidate_cache()
+            invalidate_cache(parent="ignore")
         return _(u"Cache invalidated for back references.")
 
-    def __call__(self, **kwargs):
+    def backRefs(self, **kwargs):
+        """ Invalidate back references
+        """
+        msg = self.back_refs(self.context)
+
+        # Invalidate cache for a default view parent
+        if self.is_default_page:
+            msg = self.back_refs(self.parent)
+
+        return msg
+
+    def invalidate_cache(self, context, **kwargs):
+        """ Invalidate Varnish and Memcache
+        """
         # Memcache
-        invalidate_memcache = queryMultiAdapter((self.context, self.request),
+        invalidate_memcache = queryMultiAdapter((context, self.request),
                                                 name='memcache.invalidate')
-        invalidate_memcache()
+        invalidate_memcache(parent="ignore")
 
         # Varnish
-        invalidate_varnish = queryMultiAdapter((self.context, self.request),
+        invalidate_varnish = queryMultiAdapter((context, self.request),
                                                 name='varnish.invalidate')
-        invalidate_varnish()
+        invalidate_varnish(parent="ignore")
 
         return _(u"Varnish and Memcache invalidated.")
 
-
-class InvalidateCacheFooter(InvalidateCache):
-    """ Public view to invalidate Varnish and Memcache
-    """
-
     def __call__(self, **kwargs):
-        from Products.statusmessages.interfaces import IStatusMessage
-        from zope.component import getMultiAdapter
-        from Acquisition import aq_parent
-        from Products.CMFCore.utils import getToolByName
+        msg = self.invalidate_cache(self.context)
 
-        msg_invalidated = _(u"Cache invalidated.")
-        msg_not_invalidated = _(u"Cache could not be invalidated.")
+        # Invalidate cache for a default view parent
+        if self.is_default_page and not kwargs.get("parent", None):
+            msg = self.invalidate_cache(self.parent)
 
-        # Get propper context for a default view
-        self.parent = self.context
-        state = getMultiAdapter((self.context, self.request), name='plone_context_state')
-        if state.is_default_page():
-            self.parent = aq_parent(self.context)
-
-        # Don't allow invalidation with direct link
-        referer = self.request.get('HTTP_REFERER', '')
-        if referer.endswith('/'):
-            referer = referer[:-1]
-        if (self.context.absolute_url() != referer and
-                    self.parent.absolute_url() != referer):
-            return msg_not_invalidated
-
-#        # Authenticated editors can invalidate cache from everywhere
-#        mtool = getToolByName(self.context, 'portal_membership')
-#        if mtool.checkPermission('Modify portal content', self.parent):
-#            return True
-
-#        # Check eea internal ips
-#        addr_list = set(['127.0.0.1'])
-#        ptool = getToolByName(self.context, 'portal_properties')
-#        ips_list = getattr(ptool, 'eea_internal_ips', None)
-#        if ips_list:
-#            addr_list.update(ips_list.getProperty('allowed_ips', []))
-
-#        addr = self.request.get('HTTP_X_FORWARDED_FOR', '')
-#        addr = addr or self.request.get('REMOTE_ADDR', '')
-
-#        for ip in addr_list:
-#            if addr.startswith(ip):
-#                return True
-#        return False
-
-        super(InvalidateCacheFooter, self).__call__(**kwargs)
-
-        IStatusMessage(self.request).addStatusMessage(msg_invalidated, type='info')
-        self.request.response.redirect(self.parent.absolute_url())
-        return msg_invalidated
+        return msg

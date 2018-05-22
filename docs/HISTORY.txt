@@ -3,8 +3,12 @@ Changelog
 
 8.2.dev0 - (unreleased)
 -----------------------
-* Feature: replaced invalidate_cache method with a new method,
-  called cache.invalidate.footer, that use eea.cache
+* Feature: replaced invalidate_cache method with a method that use eea.cache
+  [alecghica refs #95020]
+* Feature: "Refresh this page" method redirect you back to the original context
+  [alecghica refs #95020]
+* Feature: cache.settings if called in a context of a default view it will
+  also invalidate its parent
   [alecghica refs #95020]
 
 8.1 - (2017-12-12)
