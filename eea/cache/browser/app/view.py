@@ -14,7 +14,6 @@ from zope.component import getMultiAdapter
 
 logger = logging.getLogger('eea.cache')
 
-
 class BaseInvalidate(BrowserView):
     """ Base class for the invalidate
     """
@@ -48,10 +47,13 @@ class InvalidateMemCache(BaseInvalidate):
         """
         getRelatedItems = getattr(self.context, 'getRelatedItems', lambda: [])
         for item in getRelatedItems():
-            uid = queryAdapter(item, IUUID)
-            if not uid:
-                continue
-            event.notify(InvalidateMemCacheEvent(raw=True, dependencies=[uid]))
+            try:
+                uid = queryAdapter(item, IUUID)
+                if not uid:
+                    continue
+                event.notify(InvalidateMemCacheEvent(raw=True, dependencies=[uid]))
+            except TypeError, err:
+                logger.exception(err)
         return _(u"Memcache invalidated for relatedItems.")
 
     def relatedItems(self, **kwargs):
@@ -70,10 +72,13 @@ class InvalidateMemCache(BaseInvalidate):
         """
         getBRefs = getattr(context, 'getBRefs', lambda: [])
         for item in getBRefs():
-            uid = queryAdapter(item, IUUID)
-            if not uid:
-                continue
-            event.notify(InvalidateMemCacheEvent(raw=True, dependencies=[uid]))
+            try:
+                uid = queryAdapter(item, IUUID)
+                if not uid:
+                    continue
+                event.notify(InvalidateMemCacheEvent(raw=True, dependencies=[uid]))
+            except TypeError, err:
+                logger.exception(err)
         return _(u"Memcache invalidated for back references.")
 
     def backRefs(self, **kwargs):
@@ -113,10 +118,13 @@ class InvalidateVarnish(BaseInvalidate):
         """
         getRelatedItems = getattr(context, 'getRelatedItems', lambda: [])
         for item in getRelatedItems():
-            invalidate_cache = queryMultiAdapter(
-                (item, self.request), name='varnish.invalidate',
-                default=lambda: None)
-            invalidate_cache()
+            try:
+                invalidate_cache = queryMultiAdapter(
+                    (item, self.request), name='varnish.invalidate',
+                    default=lambda: None)
+                invalidate_cache()
+            except TypeError, err:
+                logger.exception(err)
         return _(u"Varnish invalidated for relatedItems.")
 
     def relatedItems(self, **kwargs):
@@ -135,10 +143,13 @@ class InvalidateVarnish(BaseInvalidate):
         """
         getBRefs = getattr(context, 'getBRefs', lambda: [])
         for item in getBRefs():
-            invalidate_cache = queryMultiAdapter(
-                (item, self.request), name='varnish.invalidate',
-                default=lambda: None)
-            invalidate_cache()
+            try:
+                invalidate_cache = queryMultiAdapter(
+                    (item, self.request), name='varnish.invalidate',
+                    default=lambda: None)
+                invalidate_cache()
+            except TypeError, err:
+                logger.exception(err)
         return _(u"Varnish invalidated for back references.")
 
     def backRefs(self, **kwargs):
@@ -185,10 +196,13 @@ class InvalidateCache(BaseInvalidate):
         """
         getRelatedItems = getattr(self.context, 'getRelatedItems', lambda: [])
         for item in getRelatedItems():
-            invalidate_cache = queryMultiAdapter(
-                (item, self.request), name='cache.invalidate',
-                default=lambda: None)
-            invalidate_cache(parent="ignore")
+            try:
+                invalidate_cache = queryMultiAdapter(
+                    (item, self.request), name='cache.invalidate',
+                    default=lambda: None)
+                invalidate_cache(parent="ignore")
+            except TypeError, err:
+                logger.exception(err)
         return _(u"Cache invalidated for relatedItems.")
 
     def relatedItems(self, **kwargs):
@@ -207,10 +221,13 @@ class InvalidateCache(BaseInvalidate):
         """
         getBRefs = getattr(context, 'getBRefs', lambda: [])
         for item in getBRefs():
-            invalidate_cache = queryMultiAdapter(
-                (item, self.request), name='cache.invalidate',
-                default=lambda: None)
-            invalidate_cache(parent="ignore")
+            try:
+                invalidate_cache = queryMultiAdapter(
+                    (item, self.request), name='cache.invalidate',
+                    default=lambda: None)
+                invalidate_cache(parent="ignore")
+            except TypeError, err:
+                logger.exception(err)
         return _(u"Cache invalidated for back references.")
 
     def backRefs(self, **kwargs):

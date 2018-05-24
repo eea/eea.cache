@@ -10,6 +10,9 @@ Changelog
 * Feature: cache.settings if called in a context of a default view it will
   also invalidate its parent
   [alecghica refs #95020]
+* Bug fix: fixed case under all invalidate methods when a broken relations
+  is present and None is found instead of an object
+  [alecghica refs #95020]
 
 8.1 - (2017-12-12)
 ------------------
