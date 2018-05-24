@@ -1,7 +1,7 @@
 Changelog
 =========
 
-8.2.dev0 - (unreleased)
+8.2 - (2018-05-24)
 -----------------------
 * Feature: replaced invalidate_cache method with a method that use eea.cache
   [alecghica refs #95020]
