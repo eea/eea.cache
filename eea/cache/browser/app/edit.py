@@ -6,6 +6,8 @@ from zope.component import adapts, queryMultiAdapter
 from z3c.form import form, button, interfaces, util
 from plone.supermodel import model
 from plone.autoform.form import AutoExtensibleForm
+from Products.CMFCore.utils import getToolByName
+from Products.statusmessages.interfaces import IStatusMessage
 from eea.cache.interfaces import ICacheAware
 from eea.cache.browser.interfaces import VARNISH
 from eea.cache.config import EEAMessageFactory as _
@@ -41,6 +43,12 @@ class ISettings(model.Schema):
         description=_(u"Also invalidate cache for context's back references."),
         required=False,
         default=False
+    )
+
+    redirectURL = schema.URI(
+        title=_(u"Redirect URL"),
+        description=_(u"Redirect URL when request parameter is present."),
+        required=False
     )
 
 
@@ -166,11 +174,44 @@ class SettingsBehavior(object):
         if value.get('memcache') and self.invalidate_memcache:
             self.invalidate_memcache.backRefs()
 
+    @property
+    def redirectURL(self):
+        """ Redirect URL
+        """
+        return ''
+
+    @redirectURL.setter
+    def redirectURL(self, value):
+        """ Redirect URL
+        """
+        return
+
 
 class SettingsForm(AutoExtensibleForm, form.EditForm):
     """ Cache settings
     """
     schema = ISettings
+
+    def updateWidgets(self):
+        """ Update widgets
+        """
+        super(SettingsForm, self).updateWidgets()
+        self.widgets['redirectURL'].mode = interfaces.HIDDEN_MODE
+
+    def update(self):
+        """ Update form
+        """
+        super(SettingsForm, self).update()
+        redirect_url = self.request.get('redirect', '')
+
+        if redirect_url:
+            for name, widget in self.widgets.items():
+                if name != 'redirectURL':
+                    # Select everything by default
+                    widget.items[0]['checked'] = True
+                else:
+                    # Add the redirect URL
+                    widget.value = redirect_url
 
     def applyChanges(self, content, data):
         """ Apply changes
@@ -207,7 +248,13 @@ class SettingsForm(AutoExtensibleForm, form.EditForm):
         """ Invalidate cache
         """
         self.status = u""
+        msg_invalidated = _(u"Cache invalidated")
+        portal_url = getToolByName(self.context, 'portal_url')()
+        redirectURL = self.widgets['redirectURL'].value
         data, errors = self.extractData()
+
+        if not redirectURL.startswith(portal_url):
+            redirectURL = ''
 
         if errors:
             self.status = self.formErrorsMessage
@@ -215,7 +262,11 @@ class SettingsForm(AutoExtensibleForm, form.EditForm):
 
         content = self.getContent()
         changes = self.applyChanges(content, data)
-        if changes:
-            self.status = _(u"Cache invalidated")
+        if redirectURL and changes:
+            IStatusMessage(self.request).addStatusMessage(msg_invalidated,
+                                                          type='info')
+            self.request.response.redirect(redirectURL)
+        elif changes:
+            self.status = msg_invalidated
         else:
             self.status = _(u"Nothing selected to invalidate")

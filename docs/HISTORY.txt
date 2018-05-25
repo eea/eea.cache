@@ -1,8 +1,23 @@
 Changelog
 =========
 
-8.1.dev0 - (unreleased)
+8.2 - (2018-05-24)
 -----------------------
+* Bug fix: Speed-up cache invalidation for backward-references
+  [avoinea refs #95020]
+* Feature: replaced invalidate_cache method with a method that use eea.cache
+  [alecghica refs #95020]
+* Feature: "Refresh this page" method redirect you back to the original context
+  [alecghica refs #95020]
+* Feature: cache.settings if called in a context of a default view it will
+  also invalidate its parent
+  [alecghica refs #95020]
+* Bug fix: fixed case under all invalidate methods when a broken relations
+  is present and None is found instead of an object
+  [alecghica refs #95020]
+
+8.1 - (2017-12-12)
+------------------
 * Change: Replace eeacms/zptlint with eeacms/plone-test:4 zptlint
   [avoinea refs #90415]
 
