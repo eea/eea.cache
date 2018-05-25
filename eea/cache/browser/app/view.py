@@ -91,8 +91,8 @@ class InvalidateMemCache(BaseInvalidate):
     def back_refs(self, context, **kwargs):
         """ Invalidate back references
         """
-        getBRefs = getattr(context, 'getBRefs', lambda: [])
-        for item in getBRefs():
+        getBRefs = getattr(context, 'getBRefs', lambda r: [])
+        for item in getBRefs('relatesTo'):
             try:
                 uid = queryAdapter(item, IUUID)
                 if not uid:
@@ -140,8 +140,8 @@ class InvalidateVarnish(BaseInvalidate):
     def back_refs(self, context, **kwargs):
         """ Invalidate back references
         """
-        getBRefs = getattr(context, 'getBRefs', lambda: [])
-        for item in getBRefs():
+        getBRefs = getattr(context, 'getBRefs', lambda r: [])
+        for item in getBRefs('relatesTo'):
             try:
                 invalidate_cache = queryMultiAdapter(
                     (item, self.request), name='varnish.invalidate',
@@ -196,8 +196,8 @@ class InvalidateCache(BaseInvalidate):
     def back_refs(self, context, **kwargs):
         """ Invalidate back references
         """
-        getBRefs = getattr(context, 'getBRefs', lambda: [])
-        for item in getBRefs():
+        getBRefs = getattr(context, 'getBRefs', lambda r: [])
+        for item in getBRefs('relatesTo'):
             try:
                 invalidate_cache = queryMultiAdapter(
                     (item, self.request), name='cache.invalidate',

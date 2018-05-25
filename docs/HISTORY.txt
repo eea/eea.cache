@@ -3,6 +3,8 @@ Changelog
 
 8.2 - (2018-05-24)
 -----------------------
+* Bug fix: Speed-up cache invalidation for backward-references
+  [avoinea refs #95020]
 * Feature: replaced invalidate_cache method with a method that use eea.cache
   [alecghica refs #95020]
 * Feature: "Refresh this page" method redirect you back to the original context
