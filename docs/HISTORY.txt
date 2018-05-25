@@ -1,6 +1,9 @@
 Changelog
 =========
 
+8.3-dev0 - (unreleased)
+---------------------
+
 8.2 - (2018-05-24)
 -----------------------
 * Bug fix: Speed-up cache invalidation for backward-references
@@ -174,4 +177,3 @@ Changelog
 0.1 - (2009-11-10)
 ------------------
 * Initial release
-
