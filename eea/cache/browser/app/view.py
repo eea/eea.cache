@@ -38,6 +38,38 @@ class BaseInvalidate(BrowserView):
         return self._is_default_page
 
 
+    def relatedItems(self, **kwargs):
+        """ Invalidate related Items
+        """
+        msg = self.related_items(self.context)
+
+        # Invalidate cache for a default view parent
+        if self.is_default_page:
+            msg = self.related_items(self.parent)
+
+        return msg
+
+    def backRefs(self, **kwargs):
+        """ Invalidate back references
+        """
+        msg = self.back_refs(self.context)
+
+        # Invalidate cache for a default view parent
+        if self.is_default_page:
+            msg = self.back_refs(self.parent)
+
+        return msg
+
+    def related_items(self, context, **kwargs):
+        """ Related items invalidation. To be implemented
+        """
+        raise NotImplementedError
+
+    def back_refs(self, context, **kwargs):
+        """ Invalidate back references. To be implemented
+        """
+        raise NotImplementedError
+
 class InvalidateMemCache(BaseInvalidate):
     """ View to invalidate memcache
     """
@@ -56,17 +88,6 @@ class InvalidateMemCache(BaseInvalidate):
                 logger.exception(err)
         return _(u"Memcache invalidated for relatedItems.")
 
-    def relatedItems(self, **kwargs):
-        """ Invalidate related Items
-        """
-        msg = self.related_items(self.context)
-
-        # Invalidate cache for a default view parent
-        if self.is_default_page:
-            msg = self.related_items(self.parent)
-
-        return msg
-
     def back_refs(self, context, **kwargs):
         """ Invalidate back references
         """
@@ -80,17 +101,6 @@ class InvalidateMemCache(BaseInvalidate):
             except TypeError, err:
                 logger.exception(err)
         return _(u"Memcache invalidated for back references.")
-
-    def backRefs(self, **kwargs):
-        """ Invalidate back references
-        """
-        msg = self.back_refs(self.context)
-
-        # Invalidate cache for a default view parent
-        if self.is_default_page:
-            msg = self.back_refs(self.parent)
-
-        return msg
 
     def invalidate_cache(self, context, **kwargs):
         uid = queryAdapter(context, IUUID)
@@ -127,17 +137,6 @@ class InvalidateVarnish(BaseInvalidate):
                 logger.exception(err)
         return _(u"Varnish invalidated for relatedItems.")
 
-    def relatedItems(self, **kwargs):
-        """ Invalidate related Items
-        """
-        msg = self.related_items(self.context)
-
-        # Invalidate cache for a default view parent
-        if self.is_default_page:
-            msg = self.related_items(self.parent)
-
-        return msg
-
     def back_refs(self, context, **kwargs):
         """ Invalidate back references
         """
@@ -151,17 +150,6 @@ class InvalidateVarnish(BaseInvalidate):
             except TypeError, err:
                 logger.exception(err)
         return _(u"Varnish invalidated for back references.")
-
-    def backRefs(self, **kwargs):
-        """ Invalidate back references
-        """
-        msg = self.back_refs(self.context)
-
-        # Invalidate cache for a default view parent
-        if self.is_default_page:
-            msg = self.back_refs(self.parent)
-
-        return msg
 
     def invalidate_cache(self, context, **kwargs):
         """ Invalidate Varnish
@@ -190,7 +178,7 @@ class InvalidateVarnish(BaseInvalidate):
 class InvalidateCache(BaseInvalidate):
     """ View to invalidate Varnish and Memcache
     """
-    
+
     def related_items(self, context, **kwargs):
         """ Invalidate related Items
         """
@@ -205,17 +193,6 @@ class InvalidateCache(BaseInvalidate):
                 logger.exception(err)
         return _(u"Cache invalidated for relatedItems.")
 
-    def relatedItems(self, **kwargs):
-        """ Invalidate related Items
-        """
-        msg = self.related_items(self.context)
-
-        # Invalidate cache for a default view parent
-        if self.is_default_page:
-            msg = self.related_items(self.parent)
-
-        return msg
-
     def back_refs(self, context, **kwargs):
         """ Invalidate back references
         """
@@ -229,17 +206,6 @@ class InvalidateCache(BaseInvalidate):
             except TypeError, err:
                 logger.exception(err)
         return _(u"Cache invalidated for back references.")
-
-    def backRefs(self, **kwargs):
-        """ Invalidate back references
-        """
-        msg = self.back_refs(self.context)
-
-        # Invalidate cache for a default view parent
-        if self.is_default_page:
-            msg = self.back_refs(self.parent)
-
-        return msg
 
     def invalidate_cache(self, context, **kwargs):
         """ Invalidate Varnish and Memcache
