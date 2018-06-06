@@ -1,6 +1,11 @@
 Changelog
 =========
 
+8.3 - (2018-06-06)
+---------------------
+* Bug fix: Fix relatedItems cache invalidation
+  [avoinea refs #95891]
+
 8.2 - (2018-05-24)
 -----------------------
 * Bug fix: Speed-up cache invalidation for backward-references
@@ -174,4 +179,3 @@ Changelog
 0.1 - (2009-11-10)
 ------------------
 * Initial release
-

@@ -77,7 +77,7 @@ class InvalidateMemCache(BaseInvalidate):
     def related_items(self, context, **kwargs):
         """ Invalidate related Items
         """
-        getRelatedItems = getattr(self.context, 'getRelatedItems', lambda: [])
+        getRelatedItems = getattr(context, 'getRelatedItems', lambda: [])
         for item in getRelatedItems():
             try:
                 uid = queryAdapter(item, IUUID)
@@ -182,7 +182,7 @@ class InvalidateCache(BaseInvalidate):
     def related_items(self, context, **kwargs):
         """ Invalidate related Items
         """
-        getRelatedItems = getattr(self.context, 'getRelatedItems', lambda: [])
+        getRelatedItems = getattr(context, 'getRelatedItems', lambda: [])
         for item in getRelatedItems():
             try:
                 invalidate_cache = queryMultiAdapter(
