@@ -1,7 +1,7 @@
 Changelog
 =========
 
-8.3-dev0 - (unreleased)
+8.3 - (2018-06-06)
 ---------------------
 * Bug fix: Fix relatedItems cache invalidation
   [avoinea refs #95891]
