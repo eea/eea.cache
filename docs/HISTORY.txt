@@ -3,6 +3,8 @@ Changelog
 
 8.4-dev0 - (unreleased)
 ---------------------
+* Bug fix: lambda takes no arguments (1 given)
+  [avoinea]
 
 8.3 - (2018-06-06)
 ---------------------
