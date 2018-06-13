@@ -1,6 +1,9 @@
 Changelog
 =========
 
+8.5-dev0 - (unreleased)
+---------------------
+
 8.4 - (2018-06-13)
 ---------------------
 * Bug fix: lambda takes no arguments (1 given)
