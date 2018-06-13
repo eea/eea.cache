@@ -187,7 +187,7 @@ class InvalidateCache(BaseInvalidate):
             try:
                 invalidate_cache = queryMultiAdapter(
                     (item, self.request), name='cache.invalidate',
-                    default=lambda: None)
+                    default=lambda parent: None)
                 invalidate_cache(parent="ignore")
             except TypeError, err:
                 logger.exception(err)
@@ -201,7 +201,7 @@ class InvalidateCache(BaseInvalidate):
             try:
                 invalidate_cache = queryMultiAdapter(
                     (item, self.request), name='cache.invalidate',
-                    default=lambda: None)
+                    default=lambda parent: None)
                 invalidate_cache(parent="ignore")
             except TypeError, err:
                 logger.exception(err)
