@@ -305,12 +305,12 @@ Funding and project management
 
 EEA_ - European Environment Agency (EU)
 
-.. _EEA: http://www.eea.europa.eu/
-.. _`EEA Cache`: http://eea.github.com/docs/eea.cache
-.. _`plone.recipe.zope2instance`: http://pypi.python.org/pypi/plone.recipe.zope2instance
-.. _`eea.app.visualization`: http://eea.github.com/docs/eea.app.visualization
-.. _`plone.memoize`: http://pypi.python.org/pypi/plone.memoize
-.. _`pylibmc`: http://pypi.python.org/pypi/pylibmc
-.. _`plone.uuid`: http://pypi.python.org/pypi/plone.uuid
-.. _`python-memcached`: http://pypi.python.org/pypi/python-memcached
-.. _`eea.pdf`: http://eea.github.io/docs/eea.pdf
+.. _EEA: https://www.eea.europa.eu/
+.. _`EEA Cache`: https://eea.github.io/docs/eea.cache
+.. _`plone.recipe.zope2instance`: https://pypi.python.org/pypi/plone.recipe.zope2instance
+.. _`eea.app.visualization`: https://eea.github.io/docs/eea.app.visualization
+.. _`plone.memoize`: https://pypi.python.org/pypi/plone.memoize
+.. _`pylibmc`: https://pypi.python.org/pypi/pylibmc
+.. _`plone.uuid`: https://pypi.python.org/pypi/plone.uuid
+.. _`python-memcached`: https://pypi.python.org/pypi/python-memcached
+.. _`eea.pdf`: https://eea.github.io/docs/eea.pdf
