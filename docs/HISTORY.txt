@@ -1,6 +1,13 @@
 Changelog
 =========
 
+8.5 - (2019-01-28)
+---------------------
+* Jenkins: Add sonarqube step
+  [avoinea refs #101552]
+* Change: updated URLs pointing to eea.europa.eu with https://
+  [alecghica refs #95849]
+
 8.4 - (2018-06-13)
 ---------------------
 * Bug fix: lambda takes no arguments (1 given)

@@ -52,5 +52,5 @@ Authors
 
   EEA_ - European Environment Agency (EU)
 
-.. _EEA: http://www.eea.europa.eu/
-.. _`eea.app.visualization`: http://eea.github.com/docs/eea.app.visualization
+.. _EEA: https://www.eea.europa.eu/
+.. _`eea.app.visualization`: https://eea.github.io/docs/eea.app.visualization
