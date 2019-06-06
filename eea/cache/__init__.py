@@ -132,7 +132,7 @@ def cache(get_key, dependencies=None, lifetime=None, auto_invalidate=True,
 
                 # #104478 avoid caching empty values by default
                 # pass cache_empty=True if you want to cache empty results
-                # ex: @cache(lambda *args, lifetime=3600, cache_empty=False)
+                # ex: @cache(lambda *args, lifetime=3600, cache_empty=True)
                 if not cached_value and not cache_empty:
                     return cached_value
 
