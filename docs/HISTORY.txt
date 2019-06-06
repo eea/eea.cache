@@ -1,6 +1,14 @@
 Changelog
 =========
 
+9.0 - (2019-06-06)
+---------------------
+* Change: cache decorator no longer caches empty results
+  [ichim-david refs #104467]
+* Feature: cache decorator now has cache_empty parameter if it's set will
+  still cache empty results
+  [ichim-david refs #104467]
+
 8.5 - (2019-01-28)
 ---------------------
 * Jenkins: Add sonarqube step

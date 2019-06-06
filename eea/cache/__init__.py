@@ -102,7 +102,8 @@ def uuid(self=None, *args, **kwargs):
     context = getattr(self, 'context', self)
     return queryAdapter(context, IUUID)
 
-def cache(get_key, dependencies=None, lifetime=None, auto_invalidate=True):
+def cache(get_key, dependencies=None, lifetime=None, auto_invalidate=True,
+          cache_empty=False):
     """ Cache decorator
 
     :param get_key: a unique key to be used within cache
@@ -128,6 +129,12 @@ def cache(get_key, dependencies=None, lifetime=None, auto_invalidate=True):
             cached_value = cache_store.get(key, _marker)
             if cached_value is _marker:
                 cached_value = fun(*args, **kwargs)
+
+                # #104478 avoid caching empty values by default
+                # pass cache_empty=True if you want to cache empty results
+                # ex: @cache(lambda *args, lifetime=3600, cache_empty=True)
+                if not cached_value and not cache_empty:
+                    return cached_value
 
                 # plone.memoize doesn't have the lifetime keyword parameter
                 # like eea.cache does so we check for set method
