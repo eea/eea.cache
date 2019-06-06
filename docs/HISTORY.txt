@@ -3,6 +3,11 @@ Changelog
 
 8.6-dev0 - (unreleased)
 ---------------------
+* Change: cache decorator no longer caches empty results
+  [ichim-david refs #104478]
+* Feature: cache decorator now has cache_empty parameter if it's set will
+  still cache empty results
+  [ichim-david refs #104478]
 
 8.5 - (2019-01-28)
 ---------------------
