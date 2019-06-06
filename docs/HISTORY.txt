@@ -1,7 +1,7 @@
 Changelog
 =========
 
-8.6-dev0 - (unreleased)
+8.6 - (2019-06-06)
 ---------------------
 * Change: cache decorator no longer caches empty results
   [ichim-david refs #104467]
