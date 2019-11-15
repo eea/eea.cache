@@ -1,15 +1,16 @@
 """ Memcache utilities
 """
-import md5
+from __future__ import absolute_import
+from hashlib import md5
 import time
 import logging
-import cPickle
+import six.moves.cPickle
 import threading
 import os
 import socket
 import persistent
 from zope.schema.fieldproperty import FieldProperty
-from zope import interface
+from zope.interface import implementer
 from eea.cache.interfaces import IMemcachedClient
 try:
     import pylibmc
@@ -30,16 +31,17 @@ STAMP_NS = NS + '.stamps'
 # namespace for deps
 DEP_NS = NS + '.dep'
 
+
 class Storage(object):
     """ Storage
     """
     pass
 
+
+@implementer(IMemcachedClient)
 class MemcachedClient(persistent.Persistent):
     """ Memcache client utility
     """
-    interface.implements(IMemcachedClient)
-
     defaultNS = FieldProperty(IMemcachedClient['defaultNS'])
     servers = FieldProperty(IMemcachedClient['servers'])
     defaultLifetime = FieldProperty(
@@ -88,9 +90,9 @@ class MemcachedClient(persistent.Persistent):
             lifetime = self.defaultLifetime
         ns = self._getNS(ns, raw)
         if not raw:
-            data = cPickle.dumps(data)
+            data = six.moves.cPickle.dumps(data)
         elif not isinstance(data, str):
-            raise ValueError, data
+            raise ValueError(data)
         log.debug('set: %r, %r, %r, %r', key, len(data), ns, lifetime)
 
         bKey = self._buildKey(key, ns, raw=raw)
@@ -130,7 +132,7 @@ class MemcachedClient(persistent.Persistent):
             return default
         if raw:
             return res
-        return cPickle.loads(res)
+        return six.moves.cPickle.loads(res)
 
     def _buildDepKey(self, dep, ns):
         """ Build key
@@ -224,16 +226,16 @@ class MemcachedClient(persistent.Persistent):
             if ns:
                 key = ns+key
             if not isinstance(key, str):
-                raise ValueError, repr(key)
+                raise ValueError(repr(key))
             return key
 
         oid = getattr(key, '_p_oid', None)
         if oid is not None:
             key = oid
         if ns is not None:
-            m = md5.new(cPickle.dumps((ns, key)))
+            m = md5.new(six.moves.cPickle.dumps((ns, key)))
         else:
-            m = md5.new(cPickle.dumps(key))
+            m = md5.new(six.moves.cPickle.dumps(key))
         return m.hexdigest()
 
     @property
@@ -323,7 +325,7 @@ class MemcachedClient(persistent.Persistent):
         """ Keys
         """
         if not self.trackKeys:
-            raise NotImplementedError, "trackKeys not enabled"
+            raise NotImplementedError("trackKeys not enabled")
         res = set()
         s = self.storage
         #t = time.time()

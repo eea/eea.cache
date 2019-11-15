@@ -4,6 +4,7 @@
    >>> sandbox = portal['sandbox']
 
 """
+from __future__ import absolute_import
 from zope.interface import Interface
 try:
     from Products.statusmessages import interfaces

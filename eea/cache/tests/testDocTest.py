@@ -1,5 +1,6 @@
 """ Doctest
 """
+from __future__ import absolute_import
 import unittest
 import doctest
 from zope import component

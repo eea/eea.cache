@@ -2,8 +2,9 @@
   xmlns="http://namespaces.zope.org/zope"
   i18n_domain="eea">
 
-  <utility provides=".interfaces.IMemcachedClient"
-           factory=".frontpageMemcached" />
+  <!-- XXX Python3 support -->
+  <!-- utility provides=".interfaces.IMemcachedClient"
+           factory=".frontpageMemcached" / -->
 
   <utility component=".choose_cache"
            provides="plone.memoize.interfaces.ICacheChooser" />

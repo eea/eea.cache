@@ -1,5 +1,6 @@
 """ Browser
 """
+from __future__ import absolute_import
 import logging
 from zope import event
 from zope.component import queryAdapter, queryMultiAdapter
@@ -84,7 +85,7 @@ class InvalidateMemCache(BaseInvalidate):
                 if not uid:
                     continue
                 event.notify(InvalidateMemCacheEvent(raw=True, dependencies=[uid]))
-            except TypeError, err:
+            except TypeError as err:
                 logger.exception(err)
         return _(u"Memcache invalidated for relatedItems.")
 
@@ -98,7 +99,7 @@ class InvalidateMemCache(BaseInvalidate):
                 if not uid:
                     continue
                 event.notify(InvalidateMemCacheEvent(raw=True, dependencies=[uid]))
-            except TypeError, err:
+            except TypeError as err:
                 logger.exception(err)
         return _(u"Memcache invalidated for back references.")
 
@@ -133,7 +134,7 @@ class InvalidateVarnish(BaseInvalidate):
                     (item, self.request), name='varnish.invalidate',
                     default=lambda: None)
                 invalidate_cache()
-            except TypeError, err:
+            except TypeError as err:
                 logger.exception(err)
         return _(u"Varnish invalidated for relatedItems.")
 
@@ -147,7 +148,7 @@ class InvalidateVarnish(BaseInvalidate):
                     (item, self.request), name='varnish.invalidate',
                     default=lambda: None)
                 invalidate_cache()
-            except TypeError, err:
+            except TypeError as err:
                 logger.exception(err)
         return _(u"Varnish invalidated for back references.")
 
@@ -160,7 +161,7 @@ class InvalidateVarnish(BaseInvalidate):
         try:
             if VARNISH.purge.isPurged(context):
                 event.notify(InvalidateVarnishEvent(context))
-        except Exception, err:
+        except Exception as err:
             logger.exception(err)
 
         return _(u"Varnish invalidated.")
@@ -189,7 +190,7 @@ class InvalidateCache(BaseInvalidate):
                     (item, self.request), name='cache.invalidate',
                     default=lambda parent: None)
                 invalidate_cache(parent="ignore")
-            except TypeError, err:
+            except TypeError as err:
                 logger.exception(err)
         return _(u"Cache invalidated for relatedItems.")
 
@@ -203,7 +204,7 @@ class InvalidateCache(BaseInvalidate):
                     (item, self.request), name='cache.invalidate',
                     default=lambda parent: None)
                 invalidate_cache(parent="ignore")
-            except TypeError, err:
+            except TypeError as err:
                 logger.exception(err)
         return _(u"Cache invalidated for back references.")
 

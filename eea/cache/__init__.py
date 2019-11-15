@@ -1,7 +1,8 @@
 """ EEA Cache package
 """
+from __future__ import absolute_import
 import os
-import cPickle
+import six.moves.cPickle
 import hashlib
 from plone.memoize import volatile
 from plone.memoize.interfaces import ICacheChooser
@@ -29,14 +30,15 @@ class MemcacheAdapter(AbstractDict):
     def __init__(self, client, globalkey=''):
         pt = queryUtility(IPropertiesTool)
         st = getattr(pt, 'site_properties', None)
-        defaultLifetime = getattr(st, 'memcached_defaultLifetime',
-                                  client.defaultLifetime)
+        client_default = getattr(client, 'defaultLifetime', None)
+        defaultLifetime = getattr(st, 'memcached_defaultLifetime', 
+                                  client_default)
         try:
             defaultLifetime = int(defaultLifetime)
         except Exception:
-            defaultLifetime = client.defaultLifetime
+            defaultLifetime = client_default
 
-        client.defaultLifetime = defaultLifetime
+        # XXX Python3
         self.client = client
 
     def _make_key(self, source):
@@ -47,11 +49,13 @@ class MemcacheAdapter(AbstractDict):
     def __getitem__(self, key):
         """ __getitem__
         """
-        cached_value = self.client.query(self._make_key(key), raw=True)
+        # XXX Python3
+        #cached_value = self.client.query(self._make_key(key), raw=True)
+        cached_value = None
         if cached_value is None:
             raise KeyError(key)
         else:
-            return cPickle.loads(cached_value)
+            return six.moves.cPickle.loads(cached_value)
 
     def __setitem__(self, key, value):
         """ __setitem__
@@ -67,12 +71,13 @@ class MemcacheAdapter(AbstractDict):
         :return: None
         """
         dependencies = dependencies or []
-        cached_value = cPickle.dumps(value)
-        self.client.set(cached_value,
-                        self._make_key(key),
-                        lifetime=lifetime,
-                        raw=True,
-                        dependencies=dependencies)
+        cached_value = six.moves.cPickle.dumps(value)
+        # XXX Python3
+#        self.client.set(cached_value,
+#                        self._make_key(key),
+#                        lifetime=lifetime,
+#                        raw=True,
+#                        dependencies=dependencies)
 
 def frontpageMemcached():
     """ Frontpage Memcached

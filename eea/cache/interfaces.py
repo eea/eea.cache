@@ -1,5 +1,6 @@
 """ Cache public interface
 """
+from __future__ import absolute_import
 from zope import interface
 from zope import schema
 from eea.cache.subtypes.interfaces import ICacheAware

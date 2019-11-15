@@ -1,5 +1,6 @@
 """ Events
 """
+from __future__ import absolute_import
 from zope.interface import implementer
 from zope import component
 from eea.cache.interfaces import IMemcachedClient
