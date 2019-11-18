@@ -3,7 +3,7 @@
 from __future__ import absolute_import
 import os
 import six.moves.cPickle
-import hashlib
+from hashlib import md5
 from plone.memoize import volatile
 from plone.memoize.interfaces import ICacheChooser
 from plone.memoize.ram import AbstractDict
@@ -44,14 +44,14 @@ class MemcacheAdapter(AbstractDict):
     def _make_key(self, source):
         """ Make key
         """
-        return hashlib.md5(source).hexdigest()
+        return md5(source.encode('utf-8')).hexdigest()
 
     def __getitem__(self, key):
         """ __getitem__
         """
-        # XXX Python3
-        #cached_value = self.client.query(self._make_key(key), raw=True)
         cached_value = None
+        if getattr(self.client, 'query', None):
+            cached_value = self.client.query(self._make_key(key), raw=True)
         if cached_value is None:
             raise KeyError(key)
         else:
@@ -72,12 +72,12 @@ class MemcacheAdapter(AbstractDict):
         """
         dependencies = dependencies or []
         cached_value = six.moves.cPickle.dumps(value)
-        # XXX Python3
-#        self.client.set(cached_value,
-#                        self._make_key(key),
-#                        lifetime=lifetime,
-#                        raw=True,
-#                        dependencies=dependencies)
+        if getattr(self.client, 'set', None):
+            self.client.set(cached_value,
+                            self._make_key(key),
+                            lifetime=lifetime,
+                            raw=True,
+                            dependencies=dependencies)
 
 def frontpageMemcached():
     """ Frontpage Memcached
