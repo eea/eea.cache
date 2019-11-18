@@ -38,7 +38,8 @@ class MemcacheAdapter(AbstractDict):
         except Exception:
             defaultLifetime = client_default
 
-        # XXX Python3
+        if getattr(client, 'defaultLifetime', None):
+            client.defaultLifetime = defaultLifetime
         self.client = client
 
     def _make_key(self, source):
