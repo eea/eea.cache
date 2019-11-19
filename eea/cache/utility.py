@@ -9,6 +9,7 @@ import threading
 import os
 import socket
 import persistent
+import six
 from zope.schema.fieldproperty import FieldProperty
 from zope.interface import implementer
 from eea.cache.interfaces import IMemcachedClient
@@ -44,14 +45,13 @@ class MemcachedClient(persistent.Persistent):
     """
     defaultNS = FieldProperty(IMemcachedClient['defaultNS'])
     servers = FieldProperty(IMemcachedClient['servers'])
-    defaultLifetime = FieldProperty(
-        IMemcachedClient['defaultLifetime'])
+    defaultLifetime = FieldProperty(IMemcachedClient['defaultLifetime'])
     trackKeys = FieldProperty(IMemcachedClient['trackKeys'])
 
     def __init__(self, servers=None, defaultAge=None,
                  defaultNS=None, trackKeys=None):
         if servers is not None:
-            self.servers = servers
+            self.servers = [srv.encode('utf-8') for srv in servers]
         if defaultAge is not None:
             self.defaultAge = defaultAge
         if defaultNS is not None:
@@ -91,7 +91,7 @@ class MemcachedClient(persistent.Persistent):
         ns = self._getNS(ns, raw)
         if not raw:
             data = six.moves.cPickle.dumps(data)
-        elif not isinstance(data, str):
+        elif not isinstance(data, six.binary_type):
             raise ValueError(data)
         log.debug('set: %r, %r, %r, %r', key, len(data), ns, lifetime)
 
@@ -225,7 +225,7 @@ class MemcachedClient(persistent.Persistent):
         if raw is True:
             if ns:
                 key = ns+key
-            if not isinstance(key, str):
+            if not isinstance(key, six.text_type):
                 raise ValueError(repr(key))
             return key
 

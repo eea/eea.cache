@@ -3,7 +3,7 @@ Changelog
 
 9.1-dev0 - (unreleased)
 ---------------------
-* Feature: Python3 support
+* Feature: added support for Python 3 and Plone 5.2
   [alecghica refs #110155]
 
 9.0 - (2019-06-06)
