@@ -1,6 +1,5 @@
 """ Browser
 """
-from __future__ import absolute_import
 import logging
 from zope import event
 from zope.component import queryAdapter, queryMultiAdapter

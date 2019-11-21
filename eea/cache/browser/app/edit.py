@@ -1,6 +1,5 @@
 """ Browser
 """
-from __future__ import absolute_import
 from zope import schema
 from zope.interface import implementer
 from zope.component import adapts, queryMultiAdapter

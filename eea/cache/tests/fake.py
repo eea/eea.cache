@@ -1,6 +1,5 @@
 """ Fake
 """
-from __future__ import absolute_import
 from zope.interface import implementer
 from eea.cache.utility import MemcachedClient
 from eea.cache.interfaces import IMemcachedClient

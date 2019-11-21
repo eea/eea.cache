@@ -1,6 +1,5 @@
 """ EEA Cache package
 """
-from __future__ import absolute_import
 import os
 import six.moves.cPickle
 from hashlib import md5
@@ -31,7 +30,7 @@ class MemcacheAdapter(AbstractDict):
         pt = queryUtility(IPropertiesTool)
         st = getattr(pt, 'site_properties', None)
         client_default = getattr(client, 'defaultLifetime', None)
-        defaultLifetime = getattr(st, 'memcached_defaultLifetime', 
+        defaultLifetime = getattr(st, 'memcached_defaultLifetime',
                                   client_default)
         try:
             defaultLifetime = int(defaultLifetime)

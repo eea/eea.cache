@@ -1,6 +1,5 @@
 """ Memcache utilities
 """
-from __future__ import absolute_import
 from hashlib import md5
 import time
 import logging
