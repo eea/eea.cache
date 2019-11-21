@@ -1,8 +1,8 @@
 """ EEA Cache package
 """
 import os
-import cPickle
-import hashlib
+from six.moves import cPickle as pickle
+from hashlib import md5
 from plone.memoize import volatile
 from plone.memoize.interfaces import ICacheChooser
 from plone.memoize.ram import AbstractDict
@@ -29,29 +29,33 @@ class MemcacheAdapter(AbstractDict):
     def __init__(self, client, globalkey=''):
         pt = queryUtility(IPropertiesTool)
         st = getattr(pt, 'site_properties', None)
+        client_default = getattr(client, 'defaultLifetime', None)
         defaultLifetime = getattr(st, 'memcached_defaultLifetime',
-                                  client.defaultLifetime)
+                                  client_default)
         try:
             defaultLifetime = int(defaultLifetime)
         except Exception:
-            defaultLifetime = client.defaultLifetime
+            defaultLifetime = client_default
 
-        client.defaultLifetime = defaultLifetime
+        if getattr(client, 'defaultLifetime', None):
+            client.defaultLifetime = defaultLifetime
         self.client = client
 
     def _make_key(self, source):
         """ Make key
         """
-        return hashlib.md5(source).hexdigest()
+        return md5(source.encode('utf-8')).hexdigest()
 
     def __getitem__(self, key):
         """ __getitem__
         """
-        cached_value = self.client.query(self._make_key(key), raw=True)
+        cached_value = None
+        if getattr(self.client, 'query', None):
+            cached_value = self.client.query(self._make_key(key), raw=True)
         if cached_value is None:
             raise KeyError(key)
         else:
-            return cPickle.loads(cached_value)
+            return pickle.loads(cached_value)
 
     def __setitem__(self, key, value):
         """ __setitem__
@@ -67,12 +71,13 @@ class MemcacheAdapter(AbstractDict):
         :return: None
         """
         dependencies = dependencies or []
-        cached_value = cPickle.dumps(value)
-        self.client.set(cached_value,
-                        self._make_key(key),
-                        lifetime=lifetime,
-                        raw=True,
-                        dependencies=dependencies)
+        cached_value = pickle.dumps(value)
+        if getattr(self.client, 'set', None):
+            self.client.set(cached_value,
+                            self._make_key(key),
+                            lifetime=lifetime,
+                            raw=True,
+                            dependencies=dependencies)
 
 def frontpageMemcached():
     """ Frontpage Memcached

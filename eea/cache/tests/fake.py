@@ -1,14 +1,14 @@
 """ Fake
 """
-from zope.interface import implements
+from zope.interface import implementer
 from eea.cache.utility import MemcachedClient
 from eea.cache.interfaces import IMemcachedClient
 
 
+@implementer(IMemcachedClient)
 class FakeMemcachedClient(MemcachedClient):
     """ Fake Memcached Client
     """
-    implements(IMemcachedClient)
     _cache = {}
 
     def invalidate(self, key=None, ns=None, raw=False, dependencies=None):
@@ -22,7 +22,7 @@ class FakeMemcachedClient(MemcachedClient):
     def query(self, key, default=None, ns=None, raw=False):
         """ Query
         """
-        if key in self._cache.keys():
+        if key in list(self._cache.keys()):
             return self._cache[key]['data']
         raise KeyError(key)
 
