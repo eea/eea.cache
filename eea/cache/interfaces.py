@@ -19,7 +19,7 @@ class IMemcachedClient(interface.Interface):
     servers = schema.List(
         title=u'Servers',
         description=u"Servers defined as <hostname>:<port>",
-        value_type=schema.BytesLine(),
+        value_type=schema.TextLine(),
         required=True,
         default=['127.0.0.1:11211']
         )

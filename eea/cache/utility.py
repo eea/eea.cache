@@ -28,11 +28,11 @@ TLOCAL = threading.local()
 log = logging.getLogger('eea.cache')
 
 # base namespace for key management
-NS = 'eea.cache'
+NS = b'eea.cache'
 # namespace for key timesamps
-STAMP_NS = NS + '.stamps'
+STAMP_NS = NS + b'.stamps'
 # namespace for deps
-DEP_NS = NS + '.dep'
+DEP_NS = NS + b'.dep'
 
 
 class Storage(object):
@@ -53,7 +53,7 @@ class MemcachedClient(persistent.Persistent):
     def __init__(self, servers=None, defaultAge=None,
                  defaultNS=None, trackKeys=None):
         if servers is not None:
-            self.servers = [srv.encode('utf-8') for srv in servers]
+            self.servers = servers
         if defaultAge is not None:
             self.defaultAge = defaultAge
         if defaultNS is not None:
