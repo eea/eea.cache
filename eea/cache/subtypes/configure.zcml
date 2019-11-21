@@ -40,11 +40,10 @@
     <implements interface="eea.cache.interfaces.ICacheAware" />
   </class>
 
-  <!-- Folder -->
-  <!-- XXX Python3 dropped support for Archetypes -->
-  <!-- class class="plone.app.folder.folder.ATFolder"
+  <!-- AT Folder -->
+  <class class="plone.app.folder.folder.ATFolder"
          zcml:condition="installed plone.app.folder">
     <implements interface="eea.cache.interfaces.ICacheAware" />
-  </class -->
+  </class>
 
 </configure>
