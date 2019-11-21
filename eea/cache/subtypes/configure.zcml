@@ -42,7 +42,7 @@
 
   <!-- AT Folder -->
   <class class="plone.app.folder.folder.ATFolder"
-         zcml:condition="installed plone.app.folder">
+         zcml:condition="installed plone.app.folder.folder">
     <implements interface="eea.cache.interfaces.ICacheAware" />
   </class>
 
