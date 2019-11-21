@@ -1,10 +1,14 @@
 """ Cache public interface
 """
+import six
 from zope import interface
 from zope import schema
 from eea.cache.subtypes.interfaces import ICacheAware
 from eea.cache.browser.interfaces import ILayer
 from eea.cache.browser.interfaces import VARNISH
+
+servers_value = schema.TextLine()
+servers_value._type = (six.text_type, str)
 
 class IMemcachedClient(interface.Interface):
     """A memcache client utility
@@ -19,7 +23,7 @@ class IMemcachedClient(interface.Interface):
     servers = schema.List(
         title=u'Servers',
         description=u"Servers defined as <hostname>:<port>",
-        value_type=schema.TextLine(),
+        value_type=servers_value,
         required=True,
         default=['127.0.0.1:11211']
         )
