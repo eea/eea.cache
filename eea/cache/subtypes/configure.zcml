@@ -17,8 +17,8 @@
   </class>
 
   <!-- Dexterity -->
-  <class class="plone.dexterity.content.Container"
-         zcml:condition="installed plone.app.dexterity">
+  <class class="plone.dexterity.content.DexterityContent"
+         zcml:condition="installed plone.dexterity.content">
     <implements interface="eea.cache.interfaces.ICacheAware" />
   </class>
 

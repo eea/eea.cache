@@ -3,14 +3,16 @@ Changelog
 
 9.1-dev0 - (unreleased)
 ---------------------
-* Feature: added support for Python 3 and Plone 5.2
+* Feature: Made all Dexterity content cache aware
+  [avoinea refs #110155]
+* Feature: Added support for Python 3 and Plone 5.2
   [alecghica refs #110155]
 
 9.0 - (2019-06-06)
 ---------------------
-* Change: cache decorator no longer caches empty results
+* Change: Cache decorator no longer caches empty results
   [ichim-david refs #104467]
-* Feature: cache decorator now has cache_empty parameter if it's set will
+* Feature: Cache decorator now has cache_empty parameter if it's set will
   still cache empty results
   [ichim-david refs #104467]
 
