@@ -1,14 +1,17 @@
 """ Memcache utilities
+
+  >>> from eea.cache.utility import MemcachedClient
+
 """
 from hashlib import md5
 import time
 import logging
-import six.moves.cPickle
 import threading
 import os
 import socket
 import persistent
 import six
+from six.moves import cPickle as pickle
 from zope.schema.fieldproperty import FieldProperty
 from zope.interface import implementer
 from eea.cache.interfaces import IMemcachedClient
@@ -89,7 +92,7 @@ class MemcachedClient(persistent.Persistent):
             lifetime = self.defaultLifetime
         ns = self._getNS(ns, raw)
         if not raw:
-            data = six.moves.cPickle.dumps(data)
+            data = pickle.dumps(data)
         elif not isinstance(data, six.binary_type):
             raise ValueError(data)
         log.debug('set: %r, %r, %r, %r', key, len(data), ns, lifetime)
@@ -131,7 +134,7 @@ class MemcachedClient(persistent.Persistent):
             return default
         if raw:
             return res
-        return six.moves.cPickle.loads(res)
+        return pickle.loads(res)
 
     def _buildDepKey(self, dep, ns):
         """ Build key
@@ -232,9 +235,9 @@ class MemcachedClient(persistent.Persistent):
         if oid is not None:
             key = oid
         if ns is not None:
-            m = md5.new(six.moves.cPickle.dumps((ns, key)))
+            m = md5(pickle.dumps((ns, key)))
         else:
-            m = md5.new(six.moves.cPickle.dumps(key))
+            m = md5(pickle.dumps(key))
         return m.hexdigest()
 
     @property
