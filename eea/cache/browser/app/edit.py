@@ -1,7 +1,7 @@
 """ Browser
 """
 from zope import schema
-from zope.interface import implements
+from zope.interface import implementer
 from zope.component import adapts, queryMultiAdapter
 from z3c.form import form, button, interfaces, util
 from plone.supermodel import model
@@ -52,10 +52,10 @@ class ISettings(model.Schema):
     )
 
 
+@implementer(ISettings)
 class SettingsBehavior(object):
     """ Cache invalidation behaviour
     """
-    implements(ISettings)
     adapts(ICacheAware)
 
     def __init__(self, context):

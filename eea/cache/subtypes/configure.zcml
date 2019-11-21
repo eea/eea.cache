@@ -17,8 +17,8 @@
   </class>
 
   <!-- Dexterity -->
-  <class class="plone.dexterity.content.Container"
-         zcml:condition="installed plone.app.dexterity">
+  <class class="plone.dexterity.content.DexterityContent"
+         zcml:condition="installed plone.dexterity.content">
     <implements interface="eea.cache.interfaces.ICacheAware" />
   </class>
 
@@ -40,9 +40,9 @@
     <implements interface="eea.cache.interfaces.ICacheAware" />
   </class>
 
-  <!-- Folder -->
+  <!-- AT Folder -->
   <class class="plone.app.folder.folder.ATFolder"
-         zcml:condition="installed plone.app.folder">
+         zcml:condition="installed plone.app.folder.folder">
     <implements interface="eea.cache.interfaces.ICacheAware" />
   </class>
 

@@ -1,15 +1,19 @@
 """ Memcache utilities
+
+  >>> from eea.cache.utility import MemcachedClient
+
 """
-import md5
+from hashlib import md5
 import time
 import logging
-import cPickle
 import threading
 import os
 import socket
 import persistent
+import six
+from six.moves import cPickle as pickle
 from zope.schema.fieldproperty import FieldProperty
-from zope import interface
+from zope.interface import implementer
 from eea.cache.interfaces import IMemcachedClient
 try:
     import pylibmc
@@ -24,26 +28,26 @@ TLOCAL = threading.local()
 log = logging.getLogger('eea.cache')
 
 # base namespace for key management
-NS = 'eea.cache'
+NS = b'eea.cache'
 # namespace for key timesamps
-STAMP_NS = NS + '.stamps'
+STAMP_NS = NS + b'.stamps'
 # namespace for deps
-DEP_NS = NS + '.dep'
+DEP_NS = NS + b'.dep'
+
 
 class Storage(object):
     """ Storage
     """
     pass
 
+
+@implementer(IMemcachedClient)
 class MemcachedClient(persistent.Persistent):
     """ Memcache client utility
     """
-    interface.implements(IMemcachedClient)
-
     defaultNS = FieldProperty(IMemcachedClient['defaultNS'])
     servers = FieldProperty(IMemcachedClient['servers'])
-    defaultLifetime = FieldProperty(
-        IMemcachedClient['defaultLifetime'])
+    defaultLifetime = FieldProperty(IMemcachedClient['defaultLifetime'])
     trackKeys = FieldProperty(IMemcachedClient['trackKeys'])
 
     def __init__(self, servers=None, defaultAge=None,
@@ -88,15 +92,16 @@ class MemcachedClient(persistent.Persistent):
             lifetime = self.defaultLifetime
         ns = self._getNS(ns, raw)
         if not raw:
-            data = cPickle.dumps(data)
-        elif not isinstance(data, str):
-            raise ValueError, data
+            data = pickle.dumps(data)
+        elif not isinstance(data, six.binary_type):
+            raise ValueError(data)
         log.debug('set: %r, %r, %r, %r', key, len(data), ns, lifetime)
 
         bKey = self._buildKey(key, ns, raw=raw)
         try:
             ret = self.client.set(bKey, data, lifetime)
-        except Exception:
+        except Exception as err:
+            log.exception(err)
             ret = None
         if ret:
             self._keysSet(key, ns, lifetime)
@@ -130,7 +135,7 @@ class MemcachedClient(persistent.Persistent):
             return default
         if raw:
             return res
-        return cPickle.loads(res)
+        return pickle.loads(res)
 
     def _buildDepKey(self, dep, ns):
         """ Build key
@@ -223,18 +228,24 @@ class MemcachedClient(persistent.Persistent):
         if raw is True:
             if ns:
                 key = ns+key
-            if not isinstance(key, str):
-                raise ValueError, repr(key)
-            return key
+            if isinstance(key, six.text_type):
+                return key.encode('utf-8')
+            if isinstance(key, six.binary_type):
+                return key
+            raise ValueError(repr(key))
 
         oid = getattr(key, '_p_oid', None)
         if oid is not None:
             key = oid
         if ns is not None:
-            m = md5.new(cPickle.dumps((ns, key)))
+            m = md5(pickle.dumps((ns, key)))
         else:
-            m = md5.new(cPickle.dumps(key))
-        return m.hexdigest()
+            m = md5(pickle.dumps(key))
+        key = m.hexdigest()
+        if isinstance(key, six.text_type):
+            key = key.encode('utf-8')
+        return key
+
 
     @property
     def client(self):
@@ -323,7 +334,7 @@ class MemcachedClient(persistent.Persistent):
         """ Keys
         """
         if not self.trackKeys:
-            raise NotImplementedError, "trackKeys not enabled"
+            raise NotImplementedError("trackKeys not enabled")
         res = set()
         s = self.storage
         #t = time.time()

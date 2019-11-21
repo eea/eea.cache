@@ -18,9 +18,6 @@
   <!-- Invalidate memcache on IInvalidateMemCache -->
   <subscriber handler=".event.invalidateMemCache" />
 
-  <!-- Invalidate varnish on IInvalidateVarnish event -->
-  <!-- This is already handled by plone.app.caching -->
-
   <!-- Invalidate varnish and memcache on IInvalidateEverything event -->
   <subscriber
     for="eea.cache.interfaces.ICacheAware

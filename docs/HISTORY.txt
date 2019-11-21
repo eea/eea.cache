@@ -1,28 +1,35 @@
 Changelog
 =========
 
+9.1 - (2019-11-21)
+--------------------------
+* Feature: Made all Dexterity content cache aware
+  [avoinea refs #110155]
+* Feature: Added support for Python 3 and Plone 5.2
+  [alecghica refs #110155]
+
 9.0 - (2019-06-06)
----------------------
-* Change: cache decorator no longer caches empty results
+--------------------------
+* Change: Cache decorator no longer caches empty results
   [ichim-david refs #104467]
-* Feature: cache decorator now has cache_empty parameter if it's set will
+* Feature: Cache decorator now has cache_empty parameter if it's set will
   still cache empty results
   [ichim-david refs #104467]
 
 8.5 - (2019-01-28)
----------------------
+--------------------------
 * Jenkins: Add sonarqube step
   [avoinea refs #101552]
 * Change: updated URLs pointing to eea.europa.eu with https://
   [alecghica refs #95849]
 
 8.4 - (2018-06-13)
----------------------
+--------------------------
 * Bug fix: lambda takes no arguments (1 given)
   [avoinea]
 
 8.3 - (2018-06-06)
----------------------
+--------------------------
 * Bug fix: Fix relatedItems cache invalidation
   [avoinea refs #95891]
 
