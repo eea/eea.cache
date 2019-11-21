@@ -1,6 +1,9 @@
 Changelog
 =========
 
+9.2-dev0 - (unreleased)
+---------------------------
+
 9.1 - (2019-11-21)
 --------------------------
 * Feature: Made all Dexterity content cache aware
