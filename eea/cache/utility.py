@@ -100,7 +100,8 @@ class MemcachedClient(persistent.Persistent):
         bKey = self._buildKey(key, ns, raw=raw)
         try:
             ret = self.client.set(bKey, data, lifetime)
-        except Exception:
+        except Exception as err:
+            log.exception(err)
             ret = None
         if ret:
             self._keysSet(key, ns, lifetime)
@@ -227,9 +228,11 @@ class MemcachedClient(persistent.Persistent):
         if raw is True:
             if ns:
                 key = ns+key
-            if not isinstance(key, six.text_type):
-                raise ValueError(repr(key))
-            return key
+            if isinstance(key, six.text_type):
+                return key.encode('utf-8')
+            if isinstance(key, six.binary_type):
+                return key
+            raise ValueError(repr(key))
 
         oid = getattr(key, '_p_oid', None)
         if oid is not None:
@@ -238,7 +241,11 @@ class MemcachedClient(persistent.Persistent):
             m = md5(pickle.dumps((ns, key)))
         else:
             m = md5(pickle.dumps(key))
-        return m.hexdigest()
+        key = m.hexdigest()
+        if isinstance(key, six.text_type):
+            key = key.encode('utf-8')
+        return key
+
 
     @property
     def client(self):

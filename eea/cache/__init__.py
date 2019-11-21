@@ -1,7 +1,7 @@
 """ EEA Cache package
 """
 import os
-import six.moves.cPickle
+from six.moves import cPickle as pickle
 from hashlib import md5
 from plone.memoize import volatile
 from plone.memoize.interfaces import ICacheChooser
@@ -55,7 +55,7 @@ class MemcacheAdapter(AbstractDict):
         if cached_value is None:
             raise KeyError(key)
         else:
-            return six.moves.cPickle.loads(cached_value)
+            return pickle.loads(cached_value)
 
     def __setitem__(self, key, value):
         """ __setitem__
@@ -71,7 +71,7 @@ class MemcacheAdapter(AbstractDict):
         :return: None
         """
         dependencies = dependencies or []
-        cached_value = six.moves.cPickle.dumps(value)
+        cached_value = pickle.dumps(value)
         if getattr(self.client, 'set', None):
             self.client.set(cached_value,
                             self._make_key(key),
