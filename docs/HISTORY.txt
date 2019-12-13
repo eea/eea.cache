@@ -3,6 +3,8 @@ Changelog
 
 9.2-dev0 - (unreleased)
 ---------------------------
+* Bug fix: Fix the uninstall profile
+  [avoinea]
 
 9.1 - (2019-11-21)
 --------------------------

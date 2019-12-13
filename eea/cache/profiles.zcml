@@ -9,6 +9,16 @@
       directory="profiles/default"
       description="Memcache"
       provides="Products.GenericSetup.interfaces.EXTENSION"
+      for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+      />
+
+  <genericsetup:registerProfile
+      name="uninstall"
+      title="Uninstall eea.cache"
+      directory="profiles/uninstall"
+      description="Uninstall eea.cache"
+      provides="Products.GenericSetup.interfaces.EXTENSION"
+      for="Products.CMFPlone.interfaces.IPloneSiteRoot"
       />
 
 </configure>
