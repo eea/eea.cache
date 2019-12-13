@@ -1,6 +1,11 @@
 Changelog
 =========
 
+9.2 - (2019-12-13)
+---------------------------
+* Bug fix: Fix the uninstall profile
+  [avoinea]
+
 9.1 - (2019-11-21)
 --------------------------
 * Feature: Made all Dexterity content cache aware
