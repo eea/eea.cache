@@ -3,6 +3,8 @@ Changelog
 
 9.3-dev0 - (unreleased)
 ---------------------------
+* Bug fix: Removed hard dependency on plone.app.caching: missing VARNISH.__name__
+  [avoinea]
 
 9.2 - (2019-12-13)
 ---------------------------
