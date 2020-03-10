@@ -155,5 +155,5 @@ __all__ = [
     IInvalidateMemCacheEvent.__name__,
     IInvalidateVarnishEvent.__name__,
     IInvalidateEverythingEvent.__name__,
-    VARNISH.__name__,
+    getattr(VARNISH, '__name__', '')
 ]

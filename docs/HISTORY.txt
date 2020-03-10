@@ -1,6 +1,11 @@
 Changelog
 =========
 
+9.3 - (2020-03-04)
+---------------------------
+* Bug fix: Removed hard dependency on plone.app.caching: missing VARNISH.__name__
+  [avoinea]
+
 9.2 - (2019-12-13)
 ---------------------------
 * Bug fix: Fix the uninstall profile
