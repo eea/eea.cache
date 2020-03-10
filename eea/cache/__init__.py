@@ -44,7 +44,8 @@ class MemcacheAdapter(AbstractDict):
     def _make_key(self, source):
         """ Make key
         """
-        return md5(source.encode('utf-8')).hexdigest()
+        key = source.encode('utf-8') if isinstance(source, unicode) else source
+        return md5(key).hexdigest()
 
     def __getitem__(self, key):
         """ __getitem__
