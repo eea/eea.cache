@@ -10,6 +10,10 @@ from plone.memoize.ram import store_in_cache
 from plone.uuid.interfaces import IUUID
 from eea.cache.utility import MemcachedClient
 from eea.cache.interfaces import IMemcachedClient
+import six
+
+if six.PY3:
+    unicode = str
 
 try:
     from Products.CMFCore import interfaces
@@ -44,7 +48,8 @@ class MemcacheAdapter(AbstractDict):
     def _make_key(self, source):
         """ Make key
         """
-        return md5(source.encode('utf-8')).hexdigest()
+        key = source.encode('utf-8') if isinstance(source, unicode) else source
+        return md5(key).hexdigest()
 
     def __getitem__(self, key):
         """ __getitem__
