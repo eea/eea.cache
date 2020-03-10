@@ -10,8 +10,9 @@ from plone.memoize.ram import store_in_cache
 from plone.uuid.interfaces import IUUID
 from eea.cache.utility import MemcachedClient
 from eea.cache.interfaces import IMemcachedClient
-import sys
-if sys.version_info[0] >= 3:
+import six
+
+if six.PY3:
     unicode = str
 
 try:
