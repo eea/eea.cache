@@ -2,7 +2,8 @@
   xmlns="http://namespaces.zope.org/zope"
   i18n_domain="eea">
 
-  <includeDependencies package="."/>
+  <include package="plone.memoize" />
+  <include package="plone.uuid" />
 
   <include file="profiles.zcml" />
   <include file="permissions.zcml" />

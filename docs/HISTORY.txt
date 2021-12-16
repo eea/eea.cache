@@ -3,7 +3,7 @@ Changelog
 
 9.5 - (2021-12-16)
 ---------------------------
-* Change: Fix package classifiers and python_requires
+* Change: Plone 6 / pip install ready. Drop includeDependencies
   [avoinea]
 
 9.4 - (2020-03-10)
