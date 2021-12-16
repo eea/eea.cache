@@ -1,8 +1,10 @@
 Changelog
 =========
 
-9.5-dev0 - (unreleased)
+9.5 - (2021-12-16)
 ---------------------------
+* Change: Fix package classifiers and python_requires
+  [avoinea]
 
 9.4 - (2020-03-10)
 ---------------------------
