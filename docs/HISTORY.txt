@@ -1,6 +1,11 @@
 Changelog
 =========
 
+9.5 - (2021-12-16)
+---------------------------
+* Change: Plone 6 / pip install ready. Drop includeDependencies
+  [avoinea]
+
 9.4 - (2020-03-10)
 ---------------------------
 * Bug fix: avoid error when cache key contains utf-8 characters
