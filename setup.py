@@ -40,7 +40,7 @@ setup(name=NAME,
       zip_safe=False,
       install_requires=[
         'setuptools',
-        'pylibmc',
+        'python-memcached',
         'plone.memoize',
         'plone.uuid',
       ],
