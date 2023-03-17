@@ -7,7 +7,6 @@ from plone.memoize import volatile
 from plone.memoize.interfaces import ICacheChooser
 from plone.memoize.ram import AbstractDict
 from plone.memoize.ram import store_in_cache
-from plone.memoize.ram import choose_cache as memoize_choose_cache
 from plone.uuid.interfaces import IUUID
 from eea.cache.utility import MemcachedClient
 from eea.cache.interfaces import IMemcachedClient
@@ -96,11 +95,8 @@ def frontpageMemcached():
 def choose_cache(fun_name):
     """ Choose cache
     """
-    if os.environ.get("MEMCACHE_SERVER"):
-        client = queryUtility(IMemcachedClient)
-        return MemcacheAdapter(client, globalkey=fun_name)
-    else:
-        return memoize_choose_cache(fun_name)
+    client = queryUtility(IMemcachedClient)
+    return MemcacheAdapter(client, globalkey=fun_name)
 
 
 directlyProvides(choose_cache, ICacheChooser)
